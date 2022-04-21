@@ -14,7 +14,9 @@ import android.widget.TextView;
 
 public class MainActivity0 extends AppCompatActivity {
 Button go;
+/*
 
+ */
     String[] countries = { "выберите эвристику","Бразилия", "Аргентина", "Колумбия", "Чили", "Уругвай"};
 
     @Override
