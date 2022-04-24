@@ -2,6 +2,7 @@ package com.example.shproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,7 +12,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity1 extends AppCompatActivity {
+public class PlayActivity extends AppCompatActivity {
 //    ImageView imageView[]=new ImageView[9];
     private final int[] IMAGE_VIEW_NUMBER = {
             R.id.imageView1,
@@ -50,7 +51,7 @@ public class MainActivity1 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main1);
+        setContentView(R.layout.activity_play);
 
         tv=findViewById(R.id.textView);
 
@@ -134,5 +135,11 @@ public class MainActivity1 extends AppCompatActivity {
         imageViews.get(l).setImageResource(R.drawable.x);
         desk.setCellStateByIMAGE_VIEW_NUMBER(imageViews.get(l).getId(), 1);
         checkVictory(1);
+    }
+    public void whoAreWinner(View v){
+        Intent intent = new Intent(PlayActivity.this, WinActivity.class);
+        String eText = "information to send";
+        intent.putExtra("et", eText);
+        startActivity(intent);
     }
 }
