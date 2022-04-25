@@ -53,7 +53,6 @@ public class PlayActivity extends AppCompatActivity {
         Bundle arguments = getIntent().getExtras();
 
         int ROWS = arguments.getInt("size");
-
         int COLS = ROWS;
 
         String heuristic    = arguments.getString("heuristic");
