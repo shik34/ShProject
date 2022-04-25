@@ -18,6 +18,9 @@ import java.util.List;
 
 public class PlayActivity extends AppCompatActivity {
     Button btn;
+    int i,j;
+    Desk desk;
+
     String [] infoBtn = {"Ваш ход","Ходит искусственный интеллект"};
 //    private int[] imageView_ID=new int[9];
     int cellNumber;
@@ -54,6 +57,10 @@ public class PlayActivity extends AppCompatActivity {
 
         int ROWS = arguments.getInt("size");
         int COLS = ROWS;
+        Desk desk = new Desk(ROWS,COLS);
+        int [][] cells=new int[ROWS][COLS];//??????????????????????????????????
+        for(int i=0;i<ROWS;i++)
+            for(int j=0;j<COLS;j++) cells[i][j]=-1;
 
         String heuristic    = arguments.getString("heuristic");
 
@@ -67,7 +74,8 @@ public class PlayActivity extends AppCompatActivity {
                 break;
         }
 //build grid
-        ImageView [][] imageView =new ImageView[ROWS][COLS];
+        ImageView [][] imageView  =new ImageView[ROWS][COLS];
+        int       [][] imageViewID=new int[ROWS][COLS];
         TableLayout tblLayout = null;
         tblLayout = (TableLayout) findViewById(R.id.tableLayout);
         for (int i = 0; i < ROWS; i++) {
@@ -78,82 +86,37 @@ public class PlayActivity extends AppCompatActivity {
                 imageView[i][j] = new ImageView(this);
                 imageView[i][j].setImageResource(R.drawable.icon_empty);
                 tableRow.addView(imageView[i][j], j);
+                imageViewID[i][j]=imageView[i][j].getId();
             }
             tblLayout.addView(tableRow, i);
         }
 
-
-
-/*
-
-        tv=findViewById(R.id.textView);
-        String str = getIntent().getStringExtra("et");
-        tv.setText(str);
-        */
-/*imageView[1-1]=findViewById(R.id.imageView1);
-
-        imageView[4-1]=findViewById(R.id.imageView4);
-        imageView[5-1]=findViewById(R.id.imageView5);
-        imageView[6-1]=findViewById(R.id.imageView6);*//*
-
-        imageViews = new ArrayList<ImageView>();
-        int i=0;
-        for(int id : IMAGE_VIEW_NUMBER) {
-            ImageView imageView = (ImageView)findViewById(id);
-//try{
-            imageView_ID[i]=imageView.getId();
-            i++;
-//}catch (Exception e){Toast.makeText(this,e.getMessage().toString(),Toast.LENGTH_LONG).show();}
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    for (cellNumber = 0; cellNumber < 9; cellNumber++)//получение номера cellNumber клетки, на которую кликнули
-                        if (v.getId() == imageView_ID[cellNumber]) break;
-                    if (keyFinish[cellNumber] == false) {//если клетка пустая
-//                        if (keyTemp[cellNumber] == false) {//если клетка пустая
-                            if(playerNumber==0) imageView.setImageResource(R.drawable.o);
-                            else imageView.setImageResource(R.drawable.x);
-//                          keyTemp[cellNumber] = true;  //теперь клетка занята
-                            keyFinish[cellNumber]=true;//теперь клетка занята
-//                    }
-*/
-/*                        else {             //если клетка занята
-                            imageView.setImageDrawable(null);
-                            keyTemp[cellNumber] = false; //теперь клетка пустая
-                        }*//*
-
-                        //for(int j=0;j<9;j++){tv.setText(tv.getText().toString()+imageView_ID[j]%10);}
-                        desk.setCellStateByIMAGE_VIEW_NUMBER(v.getId(), playerNumber);
-                        checkVictory(playerNumber);
-*/
-/*                        turn_1();
-                        switch (desk.checkWin(1)) {
-                            case 0:
-                                tv.setText("OOOOOOOOOOOOOOOOOOOO");
-                                break;
-                            case 1:
-                                tv.setText("XXXXXXXXXXXXXXXXXXXX");
-                                break;
-                        }*//*
-
+        for(i=0;i<ROWS;i++)
+            for(j=0;j<COLS;j++) {
+                ImageView iv=imageView[i][j];
+//              imageView[i][j].setOnClickListener(new View.OnClickListener() {
+                iv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                  imageView[i][j].setImageResource(R.drawable.icon_cross);
+                    int id  = v.getId();
+                    for(int ii=0;ii<ROWS;ii++)
+                       for(int jj=0;jj<COLS;jj++)
+                           if(imageViewID[ii][jj]==id & cells[ii][jj]==-1) {
+                                  iv.setImageResource(R.drawable.icon_cross);
+                                  cells[ii][jj]=1;
+                                  return;
+                           }
+                    for(int ii=0;ii<ROWS;ii++)
+                       for(int jj=0;jj<COLS;jj++)
+                           if(imageViewID[ii][jj]==id & cells[ii][jj]==1) {
+                                  iv.setImageResource(R.drawable.icon_empty);
+                                  cells[ii][jj]=-1;
+                                  return;
+                           }
                     }
                 }
-            });
-            imageViews.add(imageView);
-        }
-*/    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                );
+            }
+    }
 }

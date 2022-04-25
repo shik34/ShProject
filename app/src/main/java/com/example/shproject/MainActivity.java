@@ -8,9 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,13 +25,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-/*        TextView myTextView = new TextView(this);
-        myTextView.setText("asd");
-        myTextView.layout(50,50,150,150);
-        LinearLayout linearLayout =  findViewById(R.id.linearLayout_main);
-        linearLayout.addView(myTextView);*/
-
 
         Spinner spinner11 = findViewById(R.id.spinner11);
         ArrayAdapter<String> adapter1 = new ArrayAdapter(this, android.R.layout.simple_spinner_item, gridSize);
@@ -113,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, PlayActivity.class);
-                String eText = "information to send";
                 intent.putExtra("size", size);
                 intent.putExtra("heuristic", heuristic);
                 intent.putExtra("firstPlayer", firstPlayer);
