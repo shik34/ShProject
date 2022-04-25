@@ -17,7 +17,8 @@ Button go;
 /*
 
  */
-    String[] countries = { "выберите эвристику","Бразилия", "Аргентина", "Колумбия", "Чили", "Уругвай"};
+    String[] gridSize = { "размер поля","3 х 3", "4 х 4", "5 х 5"};
+    String[] heuristicType = { "эвристику","Бразилия", "Аргентина", "Колумбия", "Чили", "Уругвай"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +32,13 @@ Button go;
         linearLayout.addView(myTextView);
 
 
-        Spinner spinner = findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, countries);
+        Spinner spinner1 = findViewById(R.id.spinner1);
+        ArrayAdapter<String> adapter1 = new ArrayAdapter(this, android.R.layout.simple_spinner_item, gridSize);
         // Определяем разметку для использования при выборе элемента
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Применяем адаптер к элементу spinner
-        spinner.setAdapter(adapter);
-        AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
+        spinner1.setAdapter(adapter1);
+        AdapterView.OnItemSelectedListener itemSelectedListener1 = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Получаем выбранный объект
@@ -50,7 +51,28 @@ Button go;
 //                myTextView.setText("*************");
             }
         };
-        spinner.setOnItemSelectedListener(itemSelectedListener);
+        spinner1.setOnItemSelectedListener(itemSelectedListener1);
+
+        Spinner spinner = findViewById(R.id.spinner2);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter(this, android.R.layout.simple_spinner_item, heuristicType);
+        // Определяем разметку для использования при выборе элемента
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Применяем адаптер к элементу spinner
+        spinner.setAdapter(adapter2);
+        AdapterView.OnItemSelectedListener itemSelectedListener2 = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Получаем выбранный объект
+                String item = (String)parent.getItemAtPosition(position);
+                if(item=="выберите эвристику") myTextView.setText("*******");
+                else myTextView.setText(item);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+//                myTextView.setText("*************");
+            }
+        };
+        spinner.setOnItemSelectedListener(itemSelectedListener2);
 
 
         go=(Button)findViewById(R.id.button);
