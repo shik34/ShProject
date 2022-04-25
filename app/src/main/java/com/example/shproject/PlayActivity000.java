@@ -1,25 +1,32 @@
+/*
 package com.example.shproject;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayActivity extends AppCompatActivity {
-    Button btn     = (Button) findViewById(R.id.btn);
-    String [] infoBtn = {"Ваш ход","Ходит искусственный интеллект"};
-//    private int[] imageView_ID=new int[9];
+public class PlayActivity000 extends AppCompatActivity {
+//    ImageView imageView[]=new ImageView[9];
+    private final int[] IMAGE_VIEW_NUMBER = {
+            R.id.imageView1,
+            R.id.imageView2,
+            R.id.imageView3,
+            R.id.imageView4,
+            R.id.imageView5,
+            R.id.imageView6,
+            R.id.imageView7,
+            R.id.imageView8,
+            R.id.imageView9
+    };
+    private int[] imageView_ID=new int[9];
     int cellNumber;
     private boolean[] keyFinish=new boolean[9];
 
@@ -29,7 +36,7 @@ public class PlayActivity extends AppCompatActivity {
 
     int playerNumber=0;
 
-/*    Desk desk = new Desk(IMAGE_VIEW_NUMBER);
+    Desk desk = new Desk(IMAGE_VIEW_NUMBER);
 
     private boolean checkVictory(int playerNumber){
         switch (desk.checkWin(playerNumber)) {
@@ -41,49 +48,14 @@ public class PlayActivity extends AppCompatActivity {
                 return true;
         }
         return false;
-    }*/
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
-//get Data from MainActivity
-//        Bundle arguments = getIntent().getExtras();
-
-        int ROWS=3;//            = arguments.getInt("size");
-        int COLS = ROWS;
-
-//        String heuristic    = arguments.getString("heuristic");
-
-/*        String firstPlayer  = arguments.getString("firstPlayer");
-        switch (firstPlayer) {
-            case "Я":
-                btn.setText(infoBtn[0]);
-                break;
-            case "Искусственный интеллект":
-                btn.setText(infoBtn[1]);
-                break;
-        }*/
-//build grid
-        ImageView [][] imageView =new ImageView[ROWS][COLS];
-        TableLayout tblLayout = null;
-        tblLayout = (TableLayout) findViewById(R.id.tableLayout);
-        for (int i = 0; i < ROWS; i++) {
-            TableRow tableRow = new TableRow(this);
-            tableRow.setLayoutParams(new TableLayout.LayoutParams(500,500));
-            for (int j = 0; j < COLS; j++) {
-                // получение изображения полки
-                imageView[i][j] = new ImageView(this);
-                imageView[i][j].setImageResource(R.drawable.icon_empty);
-                tableRow.addView(imageView[i][j], j);
-            }
-            tblLayout.addView(tableRow, i);
-        }
-
-
-
-/*
 
         tv=findViewById(R.id.textView);
+
         String str = getIntent().getStringExtra("et");
         tv.setText(str);
         */
@@ -138,19 +110,43 @@ public class PlayActivity extends AppCompatActivity {
             });
             imageViews.add(imageView);
         }
-*/    }
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
+    public void cl(View v){
+        Toast.makeText(this,Integer.toString(v.getId()),Toast.LENGTH_LONG).show();
+//        Integer.toString(v.getId())
+ //       v.getId
+//        ImageView imageView = findViewById(R.id.imageView5);
+//        imageView.setImageResource(R.drawable.o);
+    }
+    public void turn(View v){
+//        keyFinish[cellNumber]=keyTemp[cellNumber];
+        if(playerNumber==0) {
+            playerNumber=1;
+            tv.setText("ход Х");
+        }
+        else {
+            playerNumber=0;
+            tv.setText("ход O");
+        }
+    }
+    public void turn_AI(View v){
+        int i,l;
+        for(i=0;i<9;i++) {
+            if(keyFinish[i]==false) break;
+        }
+        keyFinish[i]=true;
+        for (l=0;l<9;l++) {
+            if (imageViews.get(l).getId()==imageView_ID[i]) break;
+        }
+        imageViews.get(l).setImageResource(R.drawable.x);
+        desk.setCellStateByIMAGE_VIEW_NUMBER(imageViews.get(l).getId(), 1);
+        checkVictory(1);
+    }
+    public void whoAreWinner(View v){
+        Intent intent = new Intent(PlayActivity000.this, WinActivity.class);
+        String eText = "information to send";
+        intent.putExtra("et", eText);
+        startActivity(intent);
+    }
+}*/

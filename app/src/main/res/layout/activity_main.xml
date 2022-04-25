@@ -33,8 +33,9 @@
             android:id="@+id/tableRow0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <TextView
-                android:id="@+id/id_cad_details_dialog_value01"
+                android:id="@+id/tv00"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
@@ -42,11 +43,18 @@
                 android:textAllCaps="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
             <TextView
-                android:id="@+id/id_cad_details_dialog_value02"
+                android:id="@+id/tv01"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Вы выбрали:"
+                android:text="Сейчас выбрано:"
+                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+            <TextView
+                android:id="@+id/tv02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Комментарий:"
                 android:textAllCaps="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
         </TableRow>
@@ -55,14 +63,21 @@
             android:id="@+id/tableRow1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Размер поля:"
+                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
             <Spinner
-                android:id="@+id/spinner1"
+                android:id="@+id/spinner11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
             <TextView
-                android:id="@+id/id_cad_details_dialog_value1"
+                android:id="@+id/tv12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
@@ -74,14 +89,46 @@
             android:id="@+id/tableRow2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Эвристику:"
+                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
             <Spinner
-                android:id="@+id/spinner2"
+                android:id="@+id/spinner21"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
             <TextView
-                android:id="@+id/id_cad_details_dialog_value2"
+                android:id="@+id/tv22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="пока ничего"
+                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+        </TableRow>
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv30"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Кто ходит первым:"
+                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+            <Spinner
+                android:id="@+id/spinner31"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/tv32"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
