@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         linearLayout.addView(myTextView);*/
 
 
-/*        Spinner spinner11 = findViewById(R.id.spinner11);
+        Spinner spinner11 = findViewById(R.id.spinner11);
         ArrayAdapter<String> adapter1 = new ArrayAdapter(this, android.R.layout.simple_spinner_item, gridSize);
         // Определяем разметку для использования при выборе элемента
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -57,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
                 size=3;
             }
         };
-        spinner11.setOnItemSelectedListener(itemSelectedListener1);*/
+        spinner11.setOnItemSelectedListener(itemSelectedListener1);
 
-/*        Spinner spinner21 = findViewById(R.id.spinner21);
+        Spinner spinner21 = findViewById(R.id.spinner21);
         ArrayAdapter<String> adapter2 = new ArrayAdapter(this, android.R.layout.simple_spinner_item, heuristicType);
         // Определяем разметку для использования при выборе элемента
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -82,9 +82,9 @@ public class MainActivity extends AppCompatActivity {
                 heuristic="Горизонально последовательно";
             }
         };
-        spinner21.setOnItemSelectedListener(itemSelectedListener2);*/
+        spinner21.setOnItemSelectedListener(itemSelectedListener2);
 
-  /*      Spinner spinner31 = findViewById(R.id.spinner31);
+        Spinner spinner31 = findViewById(R.id.spinner31);
         ArrayAdapter<String> adapter3 = new ArrayAdapter(this, android.R.layout.simple_spinner_item, whoAreFirst);
         // Определяем разметку для использования при выборе элемента
         adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 firstPlayer="Я";
             }
         };
-        spinner31.setOnItemSelectedListener(itemSelectedListener3);*/
+        spinner31.setOnItemSelectedListener(itemSelectedListener3);
 
 
         Button go=(Button)findViewById(R.id.button);
@@ -113,10 +113,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, PlayActivity.class);
-//                String eText = "information to send";
+                String eText = "information to send";
                 intent.putExtra("size", size);
-//                intent.putExtra("heuristic", heuristic);
-//                intent.putExtra("firstPlayer", firstPlayer);
+                intent.putExtra("heuristic", heuristic);
+                intent.putExtra("firstPlayer", firstPlayer);
                 startActivity(intent);
             }
         });

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayActivity extends AppCompatActivity {
-    Button btn     = (Button) findViewById(R.id.btn);
+    Button btn;
     String [] infoBtn = {"Ваш ход","Ходит искусственный интеллект"};
 //    private int[] imageView_ID=new int[9];
     int cellNumber;
@@ -46,15 +46,18 @@ public class PlayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
-//get Data from MainActivity
-//        Bundle arguments = getIntent().getExtras();
 
-        int ROWS=3;//            = arguments.getInt("size");
+        btn     = (Button) findViewById(R.id.btn);
+
+//get Data from MainActivity
+        Bundle arguments = getIntent().getExtras();
+
+        int ROWS = arguments.getInt("size");
         int COLS = ROWS;
 
-//        String heuristic    = arguments.getString("heuristic");
+        String heuristic    = arguments.getString("heuristic");
 
-/*        String firstPlayer  = arguments.getString("firstPlayer");
+        String firstPlayer  = arguments.getString("firstPlayer");
         switch (firstPlayer) {
             case "Я":
                 btn.setText(infoBtn[0]);
@@ -62,7 +65,7 @@ public class PlayActivity extends AppCompatActivity {
             case "Искусственный интеллект":
                 btn.setText(infoBtn[1]);
                 break;
-        }*/
+        }
 //build grid
         ImageView [][] imageView =new ImageView[ROWS][COLS];
         TableLayout tblLayout = null;
