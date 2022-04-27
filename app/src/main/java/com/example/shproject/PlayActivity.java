@@ -7,17 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlayActivity extends AppCompatActivity {
-    Button btn;
+    Button button_for_text;
     int i,j;
     Desk desk;
     boolean turnIsAI;
@@ -51,7 +48,7 @@ public class PlayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
-        btn     = (Button) findViewById(R.id.btn);
+        button_for_text = (Button) findViewById(R.id.button_for_text);
 
 //get Data from MainActivity
         Bundle arguments = getIntent().getExtras();
@@ -59,9 +56,9 @@ public class PlayActivity extends AppCompatActivity {
         int ROWS = arguments.getInt("size");
         int COLS = ROWS;
         Desk desk = new Desk(ROWS,COLS);
-        int [][] cells=new int[ROWS][COLS];//??????????????????????????????????
+        //int [][] cells=new int[ROWS][COLS];//??????????????????????????????????
         for(int i=0;i<ROWS;i++)
-            for(int j=0;j<COLS;j++) cells[i][j]=-1;
+            for(int j=0;j<COLS;j++) desk.cells[i][j]=-1;
 
         String heuristic    = arguments.getString("heuristic");
 
@@ -69,11 +66,11 @@ public class PlayActivity extends AppCompatActivity {
         switch (firstPlayer) {
             case "Я":
                 turnIsAI=false;
-                btn.setText(infoBtn[0]);
+                button_for_text.setText(infoBtn[0]);
                 break;
             case "Искусственный интеллект":
                 turnIsAI=true;
-                btn.setText(infoBtn[1]);
+                button_for_text.setText(infoBtn[1]);
                 break;
         }
 //build grid
@@ -105,19 +102,33 @@ public class PlayActivity extends AppCompatActivity {
     //                  imageView[i][j].setImageResource(R.drawable.icon_cross);
                         int id  = v.getId();
                         for(int ii=0;ii<ROWS;ii++) for(int jj=0;jj<COLS;jj++)
-                            if(turnIsAI==false & imageViewID[ii][jj]==id & cells[ii][jj]==-1) {
+                            if(turnIsAI==false & imageViewID[ii][jj]==id & desk.cells[ii][jj]==-1) {
                                 iv.setImageResource(R.drawable.icon_cross);
-                                cells[ii][jj]=1;
+                                desk.cells[ii][jj]=1;
+
+                                if(desk.checkWin(0)){
+                                    Intent intent = new Intent(PlayActivity.this, WinActivity.class);
+                                    intent.putExtra("winner", 0);
+                                    startActivity(intent);
+                                }
+
                                 turnIsAI=true;
-                                btn.setText(infoBtn[1]);
+                                button_for_text.setText(infoBtn[1]);
                                 new Thread(new Runnable() {
                                     public void run() {
-                                        try {Thread.sleep(3000);} catch (Exception e) {}
-
+                                       // try {Thread.sleep(3000);} catch (Exception e) {}
+                                        desk.turnAI(heuristic,imageView);
                                         turnIsAI=false;
-                                        btn.setText(infoBtn[0]);
+                                        button_for_text.setText(infoBtn[0]);
                                     }
                                 }).start();
+
+                                if(desk.checkWin(1)){
+                                    Intent intent = new Intent(PlayActivity.this, WinActivity.class);
+                                    intent.putExtra("winner", 1);
+                                    startActivity(intent);
+                                }
+
                                 return;
                             }
 /*                        for(int ii=0;ii<ROWS;ii++)
