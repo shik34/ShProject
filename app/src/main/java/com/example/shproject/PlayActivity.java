@@ -20,6 +20,7 @@ public class PlayActivity extends AppCompatActivity {
     Button btn;
     int i,j;
     Desk desk;
+    boolean turnIsAI;
 
     String [] infoBtn = {"Ваш ход","Ходит искусственный интеллект"};
 //    private int[] imageView_ID=new int[9];
@@ -67,9 +68,11 @@ public class PlayActivity extends AppCompatActivity {
         String firstPlayer  = arguments.getString("firstPlayer");
         switch (firstPlayer) {
             case "Я":
+                turnIsAI=false;
                 btn.setText(infoBtn[0]);
                 break;
             case "Искусственный интеллект":
+                turnIsAI=true;
                 btn.setText(infoBtn[1]);
                 break;
         }
@@ -85,6 +88,7 @@ public class PlayActivity extends AppCompatActivity {
                 // получение изображения полки
                 imageView[i][j] = new ImageView(this);
                 imageView[i][j].setImageResource(R.drawable.icon_empty);
+                imageView[i][j].setId(i*10+j);
                 tableRow.addView(imageView[i][j], j);
                 imageViewID[i][j]=imageView[i][j].getId();
             }
@@ -98,22 +102,31 @@ public class PlayActivity extends AppCompatActivity {
                 iv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                  imageView[i][j].setImageResource(R.drawable.icon_cross);
-                    int id  = v.getId();
-                    for(int ii=0;ii<ROWS;ii++)
-                       for(int jj=0;jj<COLS;jj++)
-                           if(imageViewID[ii][jj]==id & cells[ii][jj]==-1) {
-                                  iv.setImageResource(R.drawable.icon_cross);
-                                  cells[ii][jj]=1;
-                                  return;
-                           }
-                    for(int ii=0;ii<ROWS;ii++)
-                       for(int jj=0;jj<COLS;jj++)
-                           if(imageViewID[ii][jj]==id & cells[ii][jj]==1) {
-                                  iv.setImageResource(R.drawable.icon_empty);
-                                  cells[ii][jj]=-1;
-                                  return;
-                           }
+    //                  imageView[i][j].setImageResource(R.drawable.icon_cross);
+                        int id  = v.getId();
+                        for(int ii=0;ii<ROWS;ii++) for(int jj=0;jj<COLS;jj++)
+                            if(turnIsAI==false & imageViewID[ii][jj]==id & cells[ii][jj]==-1) {
+                                iv.setImageResource(R.drawable.icon_cross);
+                                cells[ii][jj]=1;
+                                turnIsAI=true;
+                                btn.setText(infoBtn[1]);
+                                new Thread(new Runnable() {
+                                    public void run() {
+                                        try {Thread.sleep(3000);} catch (Exception e) {}
+
+                                        turnIsAI=false;
+                                        btn.setText(infoBtn[0]);
+                                    }
+                                }).start();
+                                return;
+                            }
+/*                        for(int ii=0;ii<ROWS;ii++)
+                           for(int jj=0;jj<COLS;jj++)
+                               if(imageViewID[ii][jj]==id & cells[ii][jj]==1) {
+                                      iv.setImageResource(R.drawable.icon_empty);
+                                      cells[ii][jj]=-1;
+                                      return;
+                               }*/
                     }
                 }
                 );
