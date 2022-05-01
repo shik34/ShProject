@@ -14,14 +14,46 @@ public class Desk{// игровое поле
     public void turnAI(String heuristic, ImageView[][] imageView){
         switch (heuristic){
             case "Горизонально последовательно":
-                for(int i=0;i<ROWS;i++) for(int j=0;j<COLS;j++)
-                    if(cells[i][j]==-1){
-                        cells[i][j]=0;
-                        imageView[i][j].setImageResource(R.drawable.icon_zero);
-                        return;
-                    }
+                turnAI_horizontal(imageView);
+                break;
+            case "Случайно":
+                turnAI_random(imageView);
                 break;
         }
+    }
+    void turnAI_horizontal(ImageView[][] imageView){
+        for(int i=0;i<ROWS;i++) for(int j=0;j<COLS;j++)
+            if(cells[i][j]==-1){
+                cells[i][j]=0;
+                imageView[i][j].setImageResource(R.drawable.icon_zero);
+                return;
+            }
+    }
+    void turnAI_random(ImageView[][] imageView){
+        int i,j;
+        while (true) {
+            i=(int)(Math.random()*ROWS);
+            j=(int)(Math.random()*ROWS);
+            if (cells[i][j] == -1) {
+                cells[i][j] = 0;
+                imageView[i][j].setImageResource(R.drawable.icon_zero);
+                return;
+            }
+        }
+    }
+    int heuristicValue(){
+        return value(0)-value(1);
+    }
+
+    int value(int x){//x==0 - zeros, x==1 - cross
+        int value=0,i,j;
+        int [][] cells0=new int[ROWS][COLS];
+        for(i=0;i<ROWS;i++) for(j=0;j<COLS;j++)
+                if (cells[i][j]==-1) cells0[i][j]=x;
+                else                 cells0[i][j]=cells[i][j];
+
+
+        return value;
     }
 /*
     public void setCellStateByIMAGE_VIEW_NUMBER(int image_view_number, int x){//x==0 - нолик, х==1 - крестик
@@ -58,7 +90,7 @@ public class Desk{// игровое поле
         }
         sum=0;
         for(i=0;i<ROWS;i++){//победа по диагонали
-            sum+=temp_state_cells[i][2-i];
+            sum+=temp_state_cells[i][ROWS-1-i];
             if (sum==sum_for_win) return true;
         }
         return false;

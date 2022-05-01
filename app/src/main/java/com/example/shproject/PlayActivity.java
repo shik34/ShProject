@@ -27,11 +27,8 @@ public class PlayActivity extends AppCompatActivity {
     TextView tv;
     private List<ImageView> imageViews;
 //    private boolean[] keyTemp =new boolean[9];
-
     int playerNumber=0;
-
 /*    Desk desk = new Desk(IMAGE_VIEW_NUMBER);
-
     private boolean checkVictory(int playerNumber){
         switch (desk.checkWin(playerNumber)) {
             case 0:
@@ -104,33 +101,33 @@ public class PlayActivity extends AppCompatActivity {
                         for(int ii=0;ii<ROWS;ii++) for(int jj=0;jj<COLS;jj++)
                             if(turnIsAI==false & imageViewID[ii][jj]==id & desk.cells[ii][jj]==-1) {
                                 iv.setImageResource(R.drawable.icon_cross);
-                                desk.cells[ii][jj]=1;
+                                desk.cells[ii][jj] = 1;
 
-                                if(desk.checkWin(0)){
-                                    Intent intent = new Intent(PlayActivity.this, WinActivity.class);
-                                    intent.putExtra("winner", 0);
-                                    startActivity(intent);
-                                }
-
-                                turnIsAI=true;
-                                button_for_text.setText(infoBtn[1]);
-                                new Thread(new Runnable() {
-                                    public void run() {
-                                       // try {Thread.sleep(3000);} catch (Exception e) {}
-                                        desk.turnAI(heuristic,imageView);
-                                        turnIsAI=false;
-                                        button_for_text.setText(infoBtn[0]);
-                                    }
-                                }).start();
-
-                                if(desk.checkWin(1)){
+                                if (desk.checkWin(1)) {
                                     Intent intent = new Intent(PlayActivity.this, WinActivity.class);
                                     intent.putExtra("winner", 1);
                                     startActivity(intent);
                                 }
-
-                                return;
+                                turnIsAI = true;
+                                button_for_text.setText(infoBtn[1]);
                             }
+                        Thread tr=new Thread(new Runnable() {
+                            public void run() {
+                                // try {Thread.sleep(3000);} catch (Exception e) {}
+                                desk.turnAI(heuristic, imageView);
+                                turnIsAI = false;
+                                button_for_text.setText(infoBtn[0]);
+                            }
+                        });
+                        tr.start();
+                        while(tr.isAlive()){}
+
+                        if (desk.checkWin(0)) {
+                            Intent intent = new Intent(PlayActivity.this, WinActivity.class);
+                            intent.putExtra("winner", 0);
+                            startActivity(intent);
+                        }
+                    }
 /*                        for(int ii=0;ii<ROWS;ii++)
                            for(int jj=0;jj<COLS;jj++)
                                if(imageViewID[ii][jj]==id & cells[ii][jj]==1) {
@@ -138,9 +135,7 @@ public class PlayActivity extends AppCompatActivity {
                                       cells[ii][jj]=-1;
                                       return;
                                }*/
-                    }
-                }
-                );
+                });
             }
     }
 }
