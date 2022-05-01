@@ -19,6 +19,12 @@ public class Desk{// игровое поле
             case "Случайно":
                 turnAI_random(imageView);
                 break;
+            case "Следующий лучший":
+                turnAI_nextBest(imageView);
+                break;
+            case "Настоящая эвристика":
+                turnAI_heuristic(imageView,3);
+                break;
         }
     }
     void turnAI_horizontal(ImageView[][] imageView){
@@ -41,19 +47,88 @@ public class Desk{// игровое поле
             }
         }
     }
-    int heuristicValue(){
-        return value(0)-value(1);
+    void turnAI_nextBest(ImageView[][] imageView){
+        int i,j;
+        int temp_value,max_value=0,max_i=0,max_j=0;
+        for(i=0;i<ROWS;i++) for(j=0;j<COLS;j++){
+            temp_value=heuristicValue();
+            if (max_value < temp_value){
+                max_value=temp_value;
+                max_i=i;
+                max_j=j;
+            }
+        }
+        imageView[max_i][max_j].setImageResource(R.drawable.icon_zero);
+    }
+    void turnAI_heuristic(ImageView[][] imageView,int depth){
+        int i,j;
+        int temp_value=0,max_value=0,max_i=0,max_j=0;
+        for(i=0;i<ROWS;i++) for(j=0;j<COLS;j++){
+            if(cells[i][j]==-1) temp_value=mini_max_heuristicValue(cells,i,j,depth);
+            if (max_value < temp_value){
+                max_value=temp_value;
+                max_i=i;
+                max_j=j;
+            }
+        }
+        imageView[max_i][max_j].setImageResource(R.drawable.icon_zero);
     }
 
-    int value(int x){//x==0 - zeros, x==1 - cross
-        int value=0,i,j;
-        int [][] cells0=new int[ROWS][COLS];
+    private int mini_max_heuristicValue(int[][] cells, int i, int j, int n) {
+        int h=0;
+
+        int new_cells[][]=new int[ROWS][COLS];
+        return h;
+    }
+
+
+    int heuristicValue(){
+        return value_of_winLine(0)-value_of_winLine(1);
+    }
+    int value_of_winLine(int x){//x==0 - for zeros, x==1 - for cross
+        int i,j;
+        int [][] temp_cells=new int[ROWS][COLS];
+        if(x==1){
         for(i=0;i<ROWS;i++) for(j=0;j<COLS;j++)
-                if (cells[i][j]==-1) cells0[i][j]=x;
-                else                 cells0[i][j]=cells[i][j];
+                if (cells[i][j]==-1) temp_cells[i][j]=1;
+                else                 temp_cells[i][j]=cells[i][j];
+        }
+        else
+            for(i=0;i<ROWS;i++) for(j=0;j<COLS;j++)
+                switch (cells[i][j]) {
+                    case -1:
+                        temp_cells[i][j] = 1;
+                    case 0:
+                        temp_cells[i][j] = 1;
+                    case 1:
+                        temp_cells[i][j] = 0;
+                }
+        return checkSums(temp_cells);
+    }
+    int checkSums(int[][]cells){
+        int sum=0,temp_sum;
+        for (int i = 0; i <ROWS ; i++) {//horizontal
+            temp_sum=0;
+            for (int j = 0; j < COLS; j++) temp_sum=cells[i][j];
+            if(temp_sum==ROWS) sum++;
+        }
+        for (int i = 0; i <ROWS ; i++) {//vertical
+            temp_sum=0;
+            for (int j = 0; j < COLS; j++) temp_sum=cells[j][i];
+            if(temp_sum==ROWS) sum++;
+        }
+        temp_sum=0;
+        for (int i = 0; i <ROWS ; i++) {//diagonal
+            temp_sum=cells[i][i];
+        }
+        if(temp_sum==ROWS) sum++;
+        temp_sum=0;
+        for (int i = 0; i <ROWS ; i++) {//diagonal
+            temp_sum=cells[i][ROWS-1-i];
+        }
+        if(temp_sum==ROWS) sum++;
 
-
-        return value;
+        return sum;
     }
 /*
     public void setCellStateByIMAGE_VIEW_NUMBER(int image_view_number, int x){//x==0 - нолик, х==1 - крестик
