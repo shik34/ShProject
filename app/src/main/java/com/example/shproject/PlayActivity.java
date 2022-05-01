@@ -98,34 +98,39 @@ public class PlayActivity extends AppCompatActivity {
                     public void onClick(View v) {
     //                  imageView[i][j].setImageResource(R.drawable.icon_cross);
                         int id  = v.getId();
-                        for(int ii=0;ii<ROWS;ii++) for(int jj=0;jj<COLS;jj++)
-                            if(turnIsAI==false & imageViewID[ii][jj]==id & desk.cells[ii][jj]==-1) {
-                                iv.setImageResource(R.drawable.icon_cross);
-                                desk.cells[ii][jj] = 1;
+                        if(turnIsAI==false) {
+                            for (int ii = 0; ii < ROWS; ii++)
+                                for (int jj = 0; jj < COLS; jj++)
+                                    if (turnIsAI == false & imageViewID[ii][jj] == id & desk.cells[ii][jj] == -1) {
+                                        iv.setImageResource(R.drawable.icon_cross);
+                                        desk.cells[ii][jj] = 1;
 
-                                if (desk.checkWin(1)) {
-                                    Intent intent = new Intent(PlayActivity.this, WinActivity.class);
-                                    intent.putExtra("winner", 1);
-                                    startActivity(intent);
+                                        if (desk.checkWin(1)) {
+                                            Intent intent = new Intent(PlayActivity.this, WinActivity.class);
+                                            intent.putExtra("winner", 1);
+                                            startActivity(intent);
+                                        }
+                                        turnIsAI = true;
+                                        button_for_text.setText(infoBtn[1]);
+                                    }
+                        }
+                        if(turnIsAI==true){
+                            Thread tr=new Thread(new Runnable() {
+                                public void run() {
+                                    // try {Thread.sleep(3000);} catch (Exception e) {}
+                                    desk.turnAI(heuristic, imageView);
+                                    turnIsAI = false;
+                                    button_for_text.setText(infoBtn[0]);
                                 }
-                                turnIsAI = true;
-                                button_for_text.setText(infoBtn[1]);
-                            }
-                        Thread tr=new Thread(new Runnable() {
-                            public void run() {
-                                // try {Thread.sleep(3000);} catch (Exception e) {}
-                                desk.turnAI(heuristic, imageView);
-                                turnIsAI = false;
-                                button_for_text.setText(infoBtn[0]);
-                            }
-                        });
-                        tr.start();
-                        while(tr.isAlive()){}
+                            });
+                            tr.start();
+                            while(tr.isAlive()){}
 
-                        if (desk.checkWin(0)) {
-                            Intent intent = new Intent(PlayActivity.this, WinActivity.class);
-                            intent.putExtra("winner", 0);
-                            startActivity(intent);
+                            if (desk.checkWin(0)) {
+                                Intent intent = new Intent(PlayActivity.this, WinActivity.class);
+                                intent.putExtra("winner", 0);
+                                startActivity(intent);
+                            }
                         }
                     }
 /*                        for(int ii=0;ii<ROWS;ii++)

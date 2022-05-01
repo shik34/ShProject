@@ -20,7 +20,7 @@ public class Desk{// игровое поле
                 turnAI_random(imageView);
                 break;
             case "Следующий лучший":
-                turnAI_nextBest(imageView);
+                turnAI_nextBest(cells,imageView);
                 break;
             case "Настоящая эвристика":
                 turnAI_heuristic(imageView,3);
@@ -37,33 +37,40 @@ public class Desk{// игровое поле
     }
     void turnAI_random(ImageView[][] imageView){
         int i,j;
-        while (true) {
+        boolean todo=true;
+        while (todo) {
             i=(int)(Math.random()*ROWS);
             j=(int)(Math.random()*ROWS);
             if (cells[i][j] == -1) {
                 cells[i][j] = 0;
                 imageView[i][j].setImageResource(R.drawable.icon_zero);
-                return;
+                todo=false;
             }
         }
     }
-    void turnAI_nextBest(ImageView[][] imageView){
+    void turnAI_nextBest(int[][]cells,ImageView[][] imageView){
         int i,j;
-        int temp_value,max_value=0,max_i=0,max_j=0;
-        for(i=0;i<ROWS;i++) for(j=0;j<COLS;j++){
-            temp_value=heuristicValue();
-            if (max_value < temp_value){
-                max_value=temp_value;
-                max_i=i;
-                max_j=j;
+        int temp_value,max_value=-10000000,max_i=0,max_j=0;
+        for(i=0;i<ROWS;i++) for(j=0;j<COLS;j++)
+            if(cells[i][j]==-1){
+                temp_value=heuristicValue(cells,i,j,0);
+                if (max_value < temp_value){
+                    max_value=temp_value;
+                    max_i=i;
+                    max_j=j;
+                }
             }
-        }
+        cells[max_i][max_j] = 0;
         imageView[max_i][max_j].setImageResource(R.drawable.icon_zero);
     }
-    void turnAI_heuristic(ImageView[][] imageView,int depth){
-        int i,j;
+    private void turnAI_heuristic(ImageView[][] imageView,int depth){
         int temp_value=0,max_value=0,max_i=0,max_j=0;
-        for(i=0;i<ROWS;i++) for(j=0;j<COLS;j++){
+        depth--;
+        if(depth==0){
+
+            return;
+        }
+        for(int i=0;i<ROWS;i++) for(int j=0;j<COLS;j++){
             if(cells[i][j]==-1) temp_value=mini_max_heuristicValue(cells,i,j,depth);
             if (max_value < temp_value){
                 max_value=temp_value;
@@ -71,24 +78,37 @@ public class Desk{// игровое поле
                 max_j=j;
             }
         }
+        cells[max_i][max_j] = 0;
         imageView[max_i][max_j].setImageResource(R.drawable.icon_zero);
     }
-
-    private int mini_max_heuristicValue(int[][] cells, int i, int j, int n) {
+    private int mini_max_heuristicValue(int[][] cells, int i, int j, int depth) {
         int h=0;
+        depth--;
+        if(depth==0){
 
+
+        }
         int new_cells[][]=new int[ROWS][COLS];
         return h;
     }
-
-
-    int heuristicValue(){
-        return value_of_winLine(0)-value_of_winLine(1);
+    private int heuristicValue(int[][]cells,int i,int j,int zero_or_cross){
+        if(zero_or_cross==0){
+            cells[i][j]=0;
+            int v=value_of_winLine(cells,0)-value_of_winLine(cells,1);
+            cells[i][j]=-1;
+            return v;
+        }
+        else{
+            cells[i][j]=1;
+            int v=value_of_winLine(cells,1)-value_of_winLine(cells,0);
+            cells[i][j]=-1;
+            return v;
+        }
     }
-    int value_of_winLine(int x){//x==0 - for zeros, x==1 - for cross
+    int value_of_winLine(int[][]cells,int zero_or_cross){//==0 - for zeros, ==1 - for cross
         int i,j;
         int [][] temp_cells=new int[ROWS][COLS];
-        if(x==1){
+        if(zero_or_cross==1){
         for(i=0;i<ROWS;i++) for(j=0;j<COLS;j++)
                 if (cells[i][j]==-1) temp_cells[i][j]=1;
                 else                 temp_cells[i][j]=cells[i][j];
