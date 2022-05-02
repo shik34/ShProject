@@ -3,15 +3,18 @@ package com.example.shproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-
+    int depth=3;// >=1
     String[] gridSize = {"3 x 3", "4 x 4", "5 x 5"};
     int size=3;
 
@@ -25,6 +28,53 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        TextView tv_dbOut = findViewById(R.id.tv_dbOut);
+        TextView tv_info2 = findViewById(R.id.tv_info2);
+
+/*        Cursor query = db.rawQuery("SELECT * FROM game;", null);
+        TextView tv_dbOut = findViewById(R.id.tv_dbOut);
+        tv_dbOut.setText("");
+        String s;
+        while(query.moveToNext()){
+            s="";
+            for (int i = 0; i <6 ; i++) {
+                s+=" "+query.getInt(i);
+            }
+            tv_dbOut.append(s+"\n");
+        }
+        query.close();*/
+
+        String [] hardLevel={"Первый","Второй","Третий","Четвёртый","Пятый","Шестой","Седьмой","Восьмой","Девятый"};
+        Spinner spinner_hardLevel = findViewById(R.id.spinner_hard_level);
+        ArrayAdapter<String> adapter_hardLevel = new ArrayAdapter(this, android.R.layout.simple_spinner_item, hardLevel);
+        // Определяем разметку для использования при выборе элемента
+        adapter_hardLevel.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Применяем адаптер к элементу spinner
+        spinner_hardLevel.setAdapter(adapter_hardLevel);
+        AdapterView.OnItemSelectedListener itemSelectedListener_hardLevel = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Получаем выбранный объект
+                String item = (String)parent.getItemAtPosition(position);
+                switch (item){
+                    case "Первый":      depth=1;break;
+                    case "Второй":      depth=2;break;
+                    case "Третий":      depth=3;break;
+                    case "Четвёртый":   depth=4;break;
+                    case "Пятый":       depth=5;break;
+                    case "Шестой":      depth=6;break;
+                    case "Седьмой":     depth=7;break;
+                    case "Восьмой":     depth=8;break;
+                    case "Девятый":     depth=9;break;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                depth=1;
+            }
+        };
+        spinner_hardLevel.setOnItemSelectedListener(itemSelectedListener_hardLevel);
 
         Spinner spinner11 = findViewById(R.id.spinner11);
         ArrayAdapter<String> adapter1 = new ArrayAdapter(this, android.R.layout.simple_spinner_item, gridSize);
@@ -62,10 +112,30 @@ public class MainActivity extends AppCompatActivity {
                 // Получаем выбранный объект
                 String item = (String)parent.getItemAtPosition(position);
                 switch (item){
-                    case "Горизонально последовательно":heuristic="Горизонально последовательно";break;
-                    case "Случайно":                    heuristic="Случайно";                    break;
-                    case "Следующий лучший":            heuristic="Следующий лучший";            break;
-                    case "Настоящая эвристика":         heuristic="Настоящая эвристика";         break;
+                    case "Горизонально последовательно":
+                        heuristic="Горизонально последовательно";
+                        tv_dbOut.setVisibility(View.INVISIBLE);
+                        tv_info2.setVisibility(View.INVISIBLE);
+                        spinner_hardLevel.setVisibility(View.INVISIBLE);
+                        break;
+                    case "Случайно":
+                        heuristic="Случайно";
+                        tv_dbOut.setVisibility(View.INVISIBLE);
+                        tv_info2.setVisibility(View.INVISIBLE);
+                        spinner_hardLevel.setVisibility(View.INVISIBLE);
+                        break;
+                    case "Следующий лучший":
+                        heuristic="Следующий лучший";
+                        tv_dbOut.setVisibility(View.INVISIBLE);
+                        tv_info2.setVisibility(View.INVISIBLE);
+                        spinner_hardLevel.setVisibility(View.INVISIBLE);
+                        break;
+                    case "Настоящая эвристика":
+                        heuristic="Настоящая эвристика";
+                        tv_dbOut.setVisibility(View.VISIBLE);
+                        tv_info2.setVisibility(View.VISIBLE);
+                        spinner_hardLevel.setVisibility(View.VISIBLE);
+                        break;
                 }
             }
             @Override
@@ -99,16 +169,21 @@ public class MainActivity extends AppCompatActivity {
         spinner31.setOnItemSelectedListener(itemSelectedListener3);
 
 
+
+
         Button go=(Button)findViewById(R.id.button);
         go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SQLiteDatabase db = getBaseContext().openOrCreateDatabase("app.db", MODE_PRIVATE, null);
+                db.execSQL("DROP TABLE IF EXISTS game");
+                db.execSQL("CREATE TABLE game (row_id INTEGER,column_0 INTEGER,column_1 INTEGER,column_2 INTEGER,column_3 INTEGER,column_4 INTEGER)");
+                db.execSQL("INSERT INTO game VALUES (0,-1,-1,-1,-1,-1),(1,-1,-1,-1,-1,-1),(2,-1,-1,-1,-1,-1),(3,-1,-1,-1,-1,-1),(4,-1,-1,-1,-1,-1);");
+                db.close();
+
                 Intent intent = new Intent(MainActivity.this, PlayActivity.class);
                 intent.putExtra("size", size);
                 intent.putExtra("heuristic", heuristic);
-                //temp:
-                int depth=0;
-                //end temp
                 intent.putExtra("depth", depth);
                 intent.putExtra("firstPlayer", firstPlayer);
                 startActivity(intent);
