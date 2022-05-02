@@ -11,7 +11,8 @@ public class Desk{// игровое поле
         cells=new int[ROWS][COLS];
         for(int i=0;i<ROWS;i++) for(int j=0;j<COLS;j++) cells[i][j]=-1;
     }
-    public void turnAI(String heuristic, ImageView[][] imageView){
+
+    void turnAI(String heuristic, ImageView[][] imageView){
         switch (heuristic){
             case "Горизонально последовательно":
                 turnAI_horizontal(imageView);
@@ -20,14 +21,15 @@ public class Desk{// игровое поле
                 turnAI_random(imageView);
                 break;
             case "Следующий лучший":
-                turnAI_nextBest(cells,imageView);
+                turnAI_nextBest(/*cells,*/imageView);
                 break;
             case "Настоящая эвристика":
                 turnAI_heuristic(imageView,3);
                 break;
         }
     }
-    void turnAI_horizontal(ImageView[][] imageView){
+
+    private void turnAI_horizontal(ImageView[][] imageView){
         for(int i=0;i<ROWS;i++) for(int j=0;j<COLS;j++)
             if(cells[i][j]==-1){
                 cells[i][j]=0;
@@ -35,7 +37,7 @@ public class Desk{// игровое поле
                 return;
             }
     }
-    void turnAI_random(ImageView[][] imageView){
+    private void turnAI_random(ImageView[][] imageView){
         int i,j;
         boolean todo=true;
         while (todo) {
@@ -48,14 +50,15 @@ public class Desk{// игровое поле
             }
         }
     }
-    void turnAI_nextBest(int[][]cells,ImageView[][] imageView){
+    private void turnAI_nextBest(/*int[][]cells,*/ImageView[][] imageView){
         int i,j;
-        int temp_value,max_value=-10000000,max_i=0,max_j=0;
+        int [][]temp_value=new int[ROWS][COLS];
+        int max_value=-10000000,max_i=0,max_j=0;
         for(i=0;i<ROWS;i++) for(j=0;j<COLS;j++)
             if(cells[i][j]==-1){
-                temp_value=heuristicValue(cells,i,j,0);
-                if (max_value < temp_value){
-                    max_value=temp_value;
+                temp_value[i][j]= heuristicValue_for_ZeroOrCross(cells,i,j,0);
+                if (max_value < temp_value[i][j]){
+                    max_value=temp_value[i][j];
                     max_i=i;
                     max_j=j;
                 }
@@ -63,7 +66,8 @@ public class Desk{// игровое поле
         cells[max_i][max_j] = 0;
         imageView[max_i][max_j].setImageResource(R.drawable.icon_zero);
     }
-    private void turnAI_heuristic(ImageView[][] imageView,int depth){
+
+    void turnAI_heuristic(ImageView[][] imageView,int depth){
         int temp_value=0,max_value=0,max_i=0,max_j=0;
         depth--;
         if(depth==0){
@@ -81,7 +85,7 @@ public class Desk{// игровое поле
         cells[max_i][max_j] = 0;
         imageView[max_i][max_j].setImageResource(R.drawable.icon_zero);
     }
-    private int mini_max_heuristicValue(int[][] cells, int i, int j, int depth) {
+    int mini_max_heuristicValue(int[][] cells, int i, int j, int depth) {
         int h=0;
         depth--;
         if(depth==0){
@@ -91,21 +95,22 @@ public class Desk{// игровое поле
         int new_cells[][]=new int[ROWS][COLS];
         return h;
     }
-    private int heuristicValue(int[][]cells,int i,int j,int zero_or_cross){
+
+    private int heuristicValue_for_ZeroOrCross(int[][]cells, int i, int j, int zero_or_cross){// - if will be step to i,j by zero_or_cross
         if(zero_or_cross==0){
             cells[i][j]=0;
-            int v=value_of_winLine(cells,0)-value_of_winLine(cells,1);
+            int v= sum_of_winLines_for_ZeroOrCross(cells,0)- sum_of_winLines_for_ZeroOrCross(cells,1);
             cells[i][j]=-1;
             return v;
         }
         else{
             cells[i][j]=1;
-            int v=value_of_winLine(cells,1)-value_of_winLine(cells,0);
+            int v= sum_of_winLines_for_ZeroOrCross(cells,1)- sum_of_winLines_for_ZeroOrCross(cells,0);
             cells[i][j]=-1;
             return v;
         }
     }
-    int value_of_winLine(int[][]cells,int zero_or_cross){//==0 - for zeros, ==1 - for cross
+    private int sum_of_winLines_for_ZeroOrCross(int[][]cells, int zero_or_cross){//zero_or_cross==0 - for zeros, zero_or_cross==1 - for cross
         int i,j;
         int [][] temp_cells=new int[ROWS][COLS];
         if(zero_or_cross==1){
@@ -123,28 +128,28 @@ public class Desk{// игровое поле
                     case 1:
                         temp_cells[i][j] = 0;
                 }
-        return checkSums(temp_cells);
+        return sum_of_winLines_for_1(temp_cells);
     }
-    int checkSums(int[][]cells){
+    private int sum_of_winLines_for_1(int[][]cells){
         int sum=0,temp_sum;
         for (int i = 0; i <ROWS ; i++) {//horizontal
             temp_sum=0;
-            for (int j = 0; j < COLS; j++) temp_sum=cells[i][j];
+            for (int j = 0; j < COLS; j++) temp_sum+=cells[i][j];
             if(temp_sum==ROWS) sum++;
         }
         for (int i = 0; i <ROWS ; i++) {//vertical
             temp_sum=0;
-            for (int j = 0; j < COLS; j++) temp_sum=cells[j][i];
+            for (int j = 0; j < COLS; j++) temp_sum+=cells[j][i];
             if(temp_sum==ROWS) sum++;
         }
         temp_sum=0;
         for (int i = 0; i <ROWS ; i++) {//diagonal
-            temp_sum=cells[i][i];
+            temp_sum+=cells[i][i];
         }
         if(temp_sum==ROWS) sum++;
         temp_sum=0;
         for (int i = 0; i <ROWS ; i++) {//diagonal
-            temp_sum=cells[i][ROWS-1-i];
+            temp_sum+=cells[i][ROWS-1-i];
         }
         if(temp_sum==ROWS) sum++;
 
