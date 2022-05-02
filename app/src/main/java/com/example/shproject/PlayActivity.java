@@ -58,6 +58,7 @@ public class PlayActivity extends AppCompatActivity {
             for(int j=0;j<COLS;j++) desk.cells[i][j]=-1;
 
         String heuristic    = arguments.getString("heuristic");
+        int depth           = arguments.getInt("depth");
 
         String firstPlayer  = arguments.getString("firstPlayer");
         switch (firstPlayer) {
@@ -118,7 +119,7 @@ public class PlayActivity extends AppCompatActivity {
                             Thread tr=new Thread(new Runnable() {
                                 public void run() {
                                     // try {Thread.sleep(3000);} catch (Exception e) {}
-                                    desk.turnAI(heuristic, imageView);
+                                    desk.turnAI(heuristic,depth, imageView);
                                     turnIsAI = false;
                                     button_for_text.setText(infoBtn[0]);
                                 }

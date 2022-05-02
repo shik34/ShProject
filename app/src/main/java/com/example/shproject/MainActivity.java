@@ -106,6 +106,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, PlayActivity.class);
                 intent.putExtra("size", size);
                 intent.putExtra("heuristic", heuristic);
+                //temp:
+                int depth=0;
+                //end temp
+                intent.putExtra("depth", depth);
                 intent.putExtra("firstPlayer", firstPlayer);
                 startActivity(intent);
             }

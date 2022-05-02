@@ -2,6 +2,8 @@ package com.example.shproject;
 
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+
 public class Desk{// игровое поле
     public int [][] cells;// -1 клетка пустая, 0 нолик, 1 крестик
     int ROWS,COLS;
@@ -12,7 +14,7 @@ public class Desk{// игровое поле
         for(int i=0;i<ROWS;i++) for(int j=0;j<COLS;j++) cells[i][j]=-1;
     }
 
-    void turnAI(String heuristic, ImageView[][] imageView){
+    void turnAI(@NonNull String heuristic,int depth ,ImageView[][] imageView){
         switch (heuristic){
             case "Горизонально последовательно":
                 turnAI_horizontal(imageView);
@@ -24,7 +26,7 @@ public class Desk{// игровое поле
                 turnAI_nextBest(/*cells,*/imageView);
                 break;
             case "Настоящая эвристика":
-                turnAI_heuristic(imageView,3);
+                turnAI_heuristic(imageView,depth);
                 break;
         }
     }
