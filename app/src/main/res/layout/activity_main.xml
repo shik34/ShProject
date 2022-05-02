@@ -145,4 +145,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Играть" />
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/tv_dbOut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="ВЫ ВЫБРАЛИ Настоящую Эвристику!"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/tv_info2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="Выберите уровень сложности:"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+    <Spinner
+        android:id="@+id/spinner_hard_level"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:visibility="invisible"
+        android:background="@drawable/border_style"
+        />
 </LinearLayout>

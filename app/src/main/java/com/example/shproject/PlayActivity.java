@@ -3,6 +3,9 @@ package com.example.shproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,14 +15,51 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class PlayActivity extends AppCompatActivity {
-    Button button_for_text;
-    int i,j;
+    int depth;
+    SQLiteDatabase db;
+    String heuristic;
+    class DoAI extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            button_for_text.setText(infoBtn[0]);
+//            mInfoTextView.setText("Кот полез на крышу");
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+//            desk.turnAI(heuristic,depth, imageView,db);
+            try{
+                TimeUnit.SECONDS.sleep(5);
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            turnIsAI = false;
+            if (desk.checkWin(0)) {
+                onClick_cancel(0);
+                                /*                                Intent intent = new Intent(PlayActivity.this, WinActivity.class);
+                                intent.putExtra("winner", 0);
+                                startActivity(intent);*/
+            }
+//            mInfoTextView.setText("Кот залез на крышу");
+        }
+    }
+DoAI doAI;
+
+//    Button button_for_text;
+    TextView button_for_text;
+    int i,j,ROWS,COLS;
     Desk desk;
     boolean turnIsAI;
 
-    String [] infoBtn = {"Ваш ход","Ходит искусственный интеллект"};
+    String [] infoBtn = {"Ваш ход","Машина думает! ЖДИТЕ !"};
 //    private int[] imageView_ID=new int[9];
     int cellNumber;
     private boolean[] keyFinish=new boolean[9];
@@ -40,25 +80,35 @@ public class PlayActivity extends AppCompatActivity {
         }
         return false;
     }*/
+ImageView [][] imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
-        button_for_text = (Button) findViewById(R.id.button_for_text);
+        doAI=new DoAI();
+
+        db = getBaseContext().openOrCreateDatabase("app.db", MODE_PRIVATE, null);
+        button_for_text = (TextView) findViewById(R.id.button_for_text);
 
 //get Data from MainActivity
         Bundle arguments = getIntent().getExtras();
 
-        int ROWS = arguments.getInt("size");
-        int COLS = ROWS;
+        ROWS = arguments.getInt("size");
+        COLS = ROWS;
         Desk desk = new Desk(ROWS,COLS);
         //int [][] cells=new int[ROWS][COLS];//??????????????????????????????????
-        for(int i=0;i<ROWS;i++)
-            for(int j=0;j<COLS;j++) desk.cells[i][j]=-1;
+        Cursor query = db.rawQuery("SELECT * FROM game;", null);
+        for(int i=0;i<ROWS;i++) {
+            query.moveToNext();
+            for (int j = 0; j < COLS; j++) {
+                desk.cells[i][j] = query.getInt(j+1);
+            }
+        }
+        query.close();
 
-        String heuristic    = arguments.getString("heuristic");
-        int depth           = arguments.getInt("depth");
+        heuristic = arguments.getString("heuristic");
+        depth     = arguments.getInt("depth");
 
         String firstPlayer  = arguments.getString("firstPlayer");
         switch (firstPlayer) {
@@ -72,7 +122,7 @@ public class PlayActivity extends AppCompatActivity {
                 break;
         }
 //build grid
-        ImageView [][] imageView  =new ImageView[ROWS][COLS];
+        /*ImageView [][] */imageView  =new ImageView[ROWS][COLS];
         int       [][] imageViewID=new int[ROWS][COLS];
         TableLayout tblLayout = null;
         tblLayout = (TableLayout) findViewById(R.id.tableLayout);
@@ -82,7 +132,17 @@ public class PlayActivity extends AppCompatActivity {
             for (int j = 0; j < COLS; j++) {
                 // получение изображения полки
                 imageView[i][j] = new ImageView(this);
-                imageView[i][j].setImageResource(R.drawable.icon_empty);
+                switch (desk.cells[i][j]){
+                    case -1:
+                        imageView[i][j].setImageResource(R.drawable.icon_empty);
+                        break;
+                    case  0:
+                        imageView[i][j].setImageResource(R.drawable.icon_zero);
+                        break;
+                    case  1:
+                        imageView[i][j].setImageResource(R.drawable.icon_cross);
+                        break;
+                }
                 imageView[i][j].setId(i*10+j);
                 tableRow.addView(imageView[i][j], j);
                 imageViewID[i][j]=imageView[i][j].getId();
@@ -105,33 +165,40 @@ public class PlayActivity extends AppCompatActivity {
                                     if (turnIsAI == false & imageViewID[ii][jj] == id & desk.cells[ii][jj] == -1) {
                                         iv.setImageResource(R.drawable.icon_cross);
                                         desk.cells[ii][jj] = 1;
+                                        db.execSQL("UPDATE game SET column_"+jj+"=1 WHERE row_id="+ii+";");
 
-                                        if (desk.checkWin(1)) {
-                                            Intent intent = new Intent(PlayActivity.this, WinActivity.class);
-                                            intent.putExtra("winner", 1);
-                                            startActivity(intent);
-                                        }
                                         turnIsAI = true;
+                                        if (desk.checkWin(1)) {
+onClick_cancel(1);
+                                            /*                                            Intent intent = new Intent(PlayActivity.this, WinActivity.class);
+                                            intent.putExtra("winner", 1);
+                                            startActivity(intent);*/
+                                        }
+
                                         button_for_text.setText(infoBtn[1]);
                                     }
                         }
                         if(turnIsAI==true){
-                            Thread tr=new Thread(new Runnable() {
+//                            doAI.execute();
+                            /*Thread tr=new Thread(new Runnable() {
                                 public void run() {
                                     // try {Thread.sleep(3000);} catch (Exception e) {}
-                                    desk.turnAI(heuristic,depth, imageView);
-                                    turnIsAI = false;
                                     button_for_text.setText(infoBtn[0]);
-                                }
+                                    desk.turnAI(heuristic,depth, imageView,db);
+                          */          turnIsAI = false;
+                        /*        }
                             });
                             tr.start();
                             while(tr.isAlive()){}
+                            */
 
-                            if (desk.checkWin(0)) {
-                                Intent intent = new Intent(PlayActivity.this, WinActivity.class);
+/*                            if (desk.checkWin(0)) {
+                                onClick_cancel(0);
+                                *//*                                Intent intent = new Intent(PlayActivity.this, WinActivity.class);
                                 intent.putExtra("winner", 0);
-                                startActivity(intent);
-                            }
+                                startActivity(intent);*//*
+                            }*/
+
                         }
                     }
 /*                        for(int ii=0;ii<ROWS;ii++)
@@ -142,6 +209,20 @@ public class PlayActivity extends AppCompatActivity {
                                       return;
                                }*/
                 });
+            }
+    }
+    void onClick_cancel(int zero_or_cross){
+        if(zero_or_cross==0) button_for_text.setText("Искусственный интеллект победил вас!");
+        else                 button_for_text.setText("Вы победили искусственный интеллект!");
+        turnIsAI=false;
+        for(i=0;i<ROWS;i++)
+            for(j=0;j<COLS;j++) {
+                ImageView iv=imageView[i][j];
+                iv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                    }
+                }  );
             }
     }
 }
