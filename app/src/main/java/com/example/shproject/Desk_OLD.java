@@ -1,20 +1,20 @@
 package com.example.shproject;
 
-class Cell000{
+class Cell_OLD {
     public int image_view_number, eox=-1;
-    Cell000(int image_view_number){
+    Cell_OLD(int image_view_number){
         this.image_view_number =image_view_number;
     }
 }
 
-public class Desk000{
-    Cell000 [][]cells=new Cell000[3][3];
-    Desk000(int... image_view_number){
+public class Desk_OLD {
+    Cell_OLD[][]cells=new Cell_OLD[3][3];
+    Desk_OLD(int... image_view_number){
         int k=0;
         for(int i=0;i<3;i++)
             for(int j=0;j<3;j++){
 //                try{
-                cells[i][j]=new Cell000(image_view_number[k]);
+                cells[i][j]=new Cell_OLD(image_view_number[k]);
 //                     } catch (Exception e){ tv.setText(e.getMessage().toString()); }
                 k++;
             }

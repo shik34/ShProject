@@ -15,9 +15,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    int depth=3;// >=1
+    int depth = 3;// >=1
     String[] gridSize = {"3 x 3", "4 x 4", "5 x 5"};
-    int size=3;
+    int size = 3;
 
     String[] heuristicType = {"По горизональным рядам", "Случайный ход", "Лучший ход", "Настоящая эвристика"};
     String heuristic;
@@ -25,12 +25,13 @@ public class MainActivity extends AppCompatActivity {
     String[] whoAreFirst = {"Я", "Искусственный интеллект"};
     String firstPlayer;
 
-@Override//*****************************************************************************************
+    @Override
+//*****************************************************************************************
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //instance=this;
-        SharedPreferences sharedPreferences = this.getSharedPreferences("visible",MODE_PRIVATE);
+        SharedPreferences sharedPreferences = this.getSharedPreferences("visible", MODE_PRIVATE);
 
         TextView tv_dbOut = findViewById(R.id.tv_dbOut);
         TextView tv_info2 = findViewById(R.id.tv_info2);
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             tv_dbOut.append(s+"\n");
         }
         query.close();*/
-        String [] hardLevel={"Первый","Второй","Третий","Четвёртый","Пятый","Шестой","Седьмой","Восьмой","Девятый"};
+        String[] hardLevel = {"Первый", "Второй", "Третий", "Четвёртый", "Пятый", "Шестой", "Седьмой", "Восьмой", "Девятый"};
         Spinner spinner_hardLevel = findViewById(R.id.spinner_hard_level);
         ArrayAdapter<String> adapter_hardLevel = new ArrayAdapter(this, android.R.layout.simple_spinner_item, hardLevel);
         // Определяем разметку для использования при выборе элемента
@@ -57,22 +58,41 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Получаем выбранный объект
-                String item = (String)parent.getItemAtPosition(position);
-                switch (item){
-                    case "Первый":      depth=1;break;
-                    case "Второй":      depth=2;break;
-                    case "Третий":      depth=3;break;
-                    case "Четвёртый":   depth=4;break;
-                    case "Пятый":       depth=5;break;
-                    case "Шестой":      depth=6;break;
-                    case "Седьмой":     depth=7;break;
-                    case "Восьмой":     depth=8;break;
-                    case "Девятый":     depth=9;break;
+                String item = (String) parent.getItemAtPosition(position);
+                switch (item) {
+                    case "Первый":
+                        depth = 1;
+                        break;
+                    case "Второй":
+                        depth = 2;
+                        break;
+                    case "Третий":
+                        depth = 3;
+                        break;
+                    case "Четвёртый":
+                        depth = 4;
+                        break;
+                    case "Пятый":
+                        depth = 5;
+                        break;
+                    case "Шестой":
+                        depth = 6;
+                        break;
+                    case "Седьмой":
+                        depth = 7;
+                        break;
+                    case "Восьмой":
+                        depth = 8;
+                        break;
+                    case "Девятый":
+                        depth = 9;
+                        break;
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                depth=1;
+                depth = 1;
             }
         };
         spinner_hardLevel.setOnItemSelectedListener(itemSelectedListener_hardLevel);
@@ -87,16 +107,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Получаем выбранный объект
-                String item = (String)parent.getItemAtPosition(position);
-                switch (item){
-                    case "3 x 3":size=3;break;
-                    case "4 x 4":size=4;break;
-                    case "5 x 5":size=5;break;
+                String item = (String) parent.getItemAtPosition(position);
+                switch (item) {
+                    case "3 x 3":
+                        size = 3;
+                        break;
+                    case "4 x 4":
+                        size = 4;
+                        break;
+                    case "5 x 5":
+                        size = 5;
+                        break;
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                size=3;
+                size = 3;
             }
         };
         spinner11.setOnItemSelectedListener(itemSelectedListener1);
@@ -111,28 +138,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Получаем выбранный объект
-                String item = (String)parent.getItemAtPosition(position);
-                switch (item){
+                String item = (String) parent.getItemAtPosition(position);
+                switch (item) {
                     case "По горизональным рядам":
-                        heuristic="Горизонально последовательно";
+                        heuristic = "Горизонально последовательно";
                         tv_dbOut.setVisibility(View.INVISIBLE);
                         tv_info2.setVisibility(View.INVISIBLE);
                         spinner_hardLevel.setVisibility(View.INVISIBLE);
                         break;
                     case "Случайный ход":
-                        heuristic="Случайно";
+                        heuristic = "Случайно";
                         tv_dbOut.setVisibility(View.INVISIBLE);
                         tv_info2.setVisibility(View.INVISIBLE);
                         spinner_hardLevel.setVisibility(View.INVISIBLE);
                         break;
                     case "Лучший ход":
-                        heuristic="Следующий лучший";
+                        heuristic = "Следующий лучший";
                         tv_dbOut.setVisibility(View.INVISIBLE);
                         tv_info2.setVisibility(View.INVISIBLE);
                         spinner_hardLevel.setVisibility(View.INVISIBLE);
                         break;
                     case "Настоящая эвристика":
-                        heuristic="Настоящая эвристика";
+                        heuristic = "Настоящая эвристика";
                         tv_dbOut.setVisibility(View.VISIBLE);
                         tv_info2.setVisibility(View.VISIBLE);
                         spinner_hardLevel.setVisibility(View.VISIBLE);
@@ -141,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                heuristic="Горизонально последовательно";
+                heuristic = "Горизонально последовательно";
             }
         };
         spinner21.setOnItemSelectedListener(itemSelectedListener2);
@@ -156,20 +183,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Получаем выбранный объект
-                String item = (String)parent.getItemAtPosition(position);
-                switch (item){
-                    case "Я":                       firstPlayer="Я";                      break;
-                    case "Искусственный интеллект": firstPlayer="Искусственный интеллект";break;
+                String item = (String) parent.getItemAtPosition(position);
+                switch (item) {
+                    case "Я":
+                        firstPlayer = "Я";
+                        break;
+                    case "Искусственный интеллект":
+                        firstPlayer = "Искусственный интеллект";
+                        break;
                 }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                firstPlayer="Я";
+                firstPlayer = "Я";
             }
         };
         spinner31.setOnItemSelectedListener(itemSelectedListener3);
 
-        Button go=(Button)findViewById(R.id.button);
+        Button go = (Button) findViewById(R.id.button);
         go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -191,17 +222,25 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        Button btn_load = (Button) findViewById(R.id.btn_load);
+        btn_load.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(MainActivity.this, ShowActivity.class);
+                startActivity(intent);
+            }
+        });
     }
-/*    private static MainActivity instance;
-    public static MainActivity getInstance() {
-        return instance;
-    }
-    public void exit() {
-        //        this.finish();
-        finishAffinity();
-//        finishAndRemoveTask();
-//        android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(0);
+    /*    private static MainActivity instance;
+        public static MainActivity getInstance() {
+            return instance;
+        }
+        public void exit() {
+            //        this.finish();
+            finishAffinity();
+    //        finishAndRemoveTask();
+    //        android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(0);
 
-    }*/
+        }*/
 }

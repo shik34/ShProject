@@ -10,7 +10,7 @@ import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity000 extends AppCompatActivity {
+public class MainActivity_OLD extends AppCompatActivity {
 Button go;
 
     String[] gridSize = {"3 х 3", "4 х 4", "5 х 5"};
@@ -75,7 +75,7 @@ Button go;
         go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity000.this, PlayActivity.class);
+                Intent intent = new Intent(MainActivity_OLD.this, PlayActivity.class);
                 String eText = "information to send";
                 intent.putExtra("et", eText);
                 startActivity(intent);
