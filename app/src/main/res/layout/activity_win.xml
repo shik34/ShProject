@@ -1,24 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".WinActivity">
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="150dp"
-        android:layout_marginTop="137dp"
-        android:layout_marginEnd="203dp"
-        android:layout_marginBottom="575dp"
-        android:text="TextView"
-        android:onClick="onClick"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="#FAffA2"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="СОХРАНЕНИЕ ВАШЕГО ИГРОВОГО ПОЛЯ"
+        android:textSize="20sp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Введите уникальное имя:"
+        android:textSize="20sp" />
+    <EditText
+        android:id="@+id/et_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text=""
+        android:background="@drawable/border_style"
+        android:textSize="20sp" />
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FfEfA2"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Попытаться сохранить"
+        android:textSize="20sp" />
+    <TextView
+        android:id="@+id/tv_win"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text=""
+        android:textSize="20sp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Сохранить"
+            android:visibility="invisible" />
+        <Button
+            android:id="@+id/button_for_continue2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Играть ещё"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center_horizontal"
+            android:visibility="invisible"
+            />
+        <Button
+            android:id="@+id/button_for_exit2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Выйти"
+            android:gravity="center_horizontal"
+            android:visibility="invisible"
+            />
+    </LinearLayout>
+</LinearLayout>

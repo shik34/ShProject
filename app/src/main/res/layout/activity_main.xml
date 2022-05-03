@@ -49,14 +49,14 @@
                 android:padding="5dp"
                 android:text="Сейчас выбрано:"
                 android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
-            <TextView
+            <!--<TextView
                 android:id="@+id/tv02"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:text="Комментарий:"
                 android:textAllCaps="true"
-                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>-->
         </TableRow>
 
         <TableRow
@@ -75,14 +75,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-            <TextView
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@drawable/border_style"
+                />
+            <!--<TextView
                 android:id="@+id/tv12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:text="пока ничего"
-                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>-->
         </TableRow>
 
         <TableRow
@@ -101,14 +103,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-            <TextView
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@drawable/border_style"
+                />
+            <!--<TextView
                 android:id="@+id/tv22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:text="пока ничего"
-                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>-->
         </TableRow>
         <TableRow
             android:id="@+id/tableRow3"
@@ -126,14 +130,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-            <TextView
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@drawable/border_style"
+                />
+            <!--<TextView
                 android:id="@+id/tv32"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:text="пока ничего"
-                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>-->
         </TableRow>
 
     </TableLayout>
@@ -171,4 +177,10 @@
         android:visibility="invisible"
         android:background="@drawable/border_style"
         />
+    <Button
+        android:id="@+id/btn_load"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="Посмотреть сохранённые" />
 </LinearLayout>

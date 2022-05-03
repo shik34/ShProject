@@ -3,6 +3,7 @@ package com.example.shproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -18,20 +19,21 @@ public class MainActivity extends AppCompatActivity {
     String[] gridSize = {"3 x 3", "4 x 4", "5 x 5"};
     int size=3;
 
-    String[] heuristicType = {"Горизонально последовательно", "Случайно", "Следующий лучший", "Настоящая эвристика"};
+    String[] heuristicType = {"По горизональным рядам", "Случайный ход", "Лучший ход", "Настоящая эвристика"};
     String heuristic;
 
     String[] whoAreFirst = {"Я", "Искусственный интеллект"};
     String firstPlayer;
 
-    @Override
+@Override//*****************************************************************************************
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//instance=this;
+        SharedPreferences sharedPreferences = this.getSharedPreferences("visible",MODE_PRIVATE);
 
         TextView tv_dbOut = findViewById(R.id.tv_dbOut);
         TextView tv_info2 = findViewById(R.id.tv_info2);
-
 /*        Cursor query = db.rawQuery("SELECT * FROM game;", null);
         TextView tv_dbOut = findViewById(R.id.tv_dbOut);
         tv_dbOut.setText("");
@@ -44,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
             tv_dbOut.append(s+"\n");
         }
         query.close();*/
-
         String [] hardLevel={"Первый","Второй","Третий","Четвёртый","Пятый","Шестой","Седьмой","Восьмой","Девятый"};
         Spinner spinner_hardLevel = findViewById(R.id.spinner_hard_level);
         ArrayAdapter<String> adapter_hardLevel = new ArrayAdapter(this, android.R.layout.simple_spinner_item, hardLevel);
@@ -112,19 +113,19 @@ public class MainActivity extends AppCompatActivity {
                 // Получаем выбранный объект
                 String item = (String)parent.getItemAtPosition(position);
                 switch (item){
-                    case "Горизонально последовательно":
+                    case "По горизональным рядам":
                         heuristic="Горизонально последовательно";
                         tv_dbOut.setVisibility(View.INVISIBLE);
                         tv_info2.setVisibility(View.INVISIBLE);
                         spinner_hardLevel.setVisibility(View.INVISIBLE);
                         break;
-                    case "Случайно":
+                    case "Случайный ход":
                         heuristic="Случайно";
                         tv_dbOut.setVisibility(View.INVISIBLE);
                         tv_info2.setVisibility(View.INVISIBLE);
                         spinner_hardLevel.setVisibility(View.INVISIBLE);
                         break;
-                    case "Следующий лучший":
+                    case "Лучший ход":
                         heuristic="Следующий лучший";
                         tv_dbOut.setVisibility(View.INVISIBLE);
                         tv_info2.setVisibility(View.INVISIBLE);
@@ -168,9 +169,6 @@ public class MainActivity extends AppCompatActivity {
         };
         spinner31.setOnItemSelectedListener(itemSelectedListener3);
 
-
-
-
         Button go=(Button)findViewById(R.id.button);
         go.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +179,10 @@ public class MainActivity extends AppCompatActivity {
                 db.execSQL("INSERT INTO game VALUES (0,-1,-1,-1,-1,-1),(1,-1,-1,-1,-1,-1),(2,-1,-1,-1,-1,-1),(3,-1,-1,-1,-1,-1),(4,-1,-1,-1,-1,-1);");
                 db.close();
 
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("VISIBILITY", 0);
+                editor.commit();
+
                 Intent intent = new Intent(MainActivity.this, PlayActivity.class);
                 intent.putExtra("size", size);
                 intent.putExtra("heuristic", heuristic);
@@ -190,4 +192,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+/*    private static MainActivity instance;
+    public static MainActivity getInstance() {
+        return instance;
+    }
+    public void exit() {
+        //        this.finish();
+        finishAffinity();
+//        finishAndRemoveTask();
+//        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
+
+    }*/
 }

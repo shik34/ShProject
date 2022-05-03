@@ -3,6 +3,7 @@ package com.example.shproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -18,27 +19,15 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class PlayActivity extends AppCompatActivity {
-    int depth=0;
-    SQLiteDatabase db;
-    String heuristic;
-
-
-
-//    Button button_for_text;
-    TextView button_for_text;
-    int i,j,ROWS,COLS;
-    Desk desk;
-    boolean turnIsAI;
-
-    String [] infoBtn = {"Ваш ход","Машина думает! ЖДИТЕ !"};
-//    private int[] imageView_ID=new int[9];
-    int cellNumber;
-    private boolean[] keyFinish=new boolean[9];
-
-    TextView tv;
-    private List<ImageView> imageViews;
-//    private boolean[] keyTemp =new boolean[9];
-    int playerNumber=0;
+//  Desk desk;
+//  Button button_for_text;
+//  private int[] imageView_ID=new int[9];
+//  int cellNumber;
+//  private boolean[] keyFinish=new boolean[9];
+//  TextView tv;
+//  private List<ImageView> imageViews;
+//  private boolean[] keyTemp =new boolean[9];
+//  int playerNumber=0;
 /*    Desk desk = new Desk(IMAGE_VIEW_NUMBER);
     private boolean checkVictory(int playerNumber){
         switch (desk.checkWin(playerNumber)) {
@@ -51,49 +40,55 @@ public class PlayActivity extends AppCompatActivity {
         }
         return false;
     }*/
-ImageView [][] imageView;
+    SQLiteDatabase db;
+    TextView button_for_text;
+    Button button_for_save, button_for_continue, button_for_exit;
 
+    ImageView [][] imageView;
+    int depth=0,i,j,ROWS,COLS;
+    boolean turnIsAI;
+    String heuristic, infoBtn [] = {"Ваш ход","Машина думает! ЖДИТЕ !"};
 @Override//*****************************************************************************************
     protected void onCreate(Bundle savedInstanceState) {
-
-
-
-    class DoAI extends AsyncTask<Void, Void, Desk> {
+/*    class DoAI extends AsyncTask<Void, Void, Desk> {
         @Override
         protected void onPreExecute() {
-//            button_for_text.setText(infoBtn[1]);
-//            mInfoTextView.setText("Кот полез на крышу");
+            button_for_text.setText(infoBtn[1]);
         }
         @Override
         protected Desk doInBackground(Void... voids) {
-//            desk.turnAI(heuristic,depth, imageView,db);
-/*            try{
+            desk.turnAI(heuristic,depth, imageView,db);
+            try{
                 TimeUnit.SECONDS.sleep(5);
             }catch (InterruptedException e){
                 e.printStackTrace();
-            }*/
+            }
             return null;
         }
         @Override
         protected void onPostExecute(Desk aVoid) {
             turnIsAI = false;
-//            button_for_text.setText(infoBtn[0]);
+            button_for_text.setText(infoBtn[0]);
             if (aVoid.checkWin(0)) {
                 onClick_cancel(0);
             }
-//            mInfoTextView.setText("Кот залез на крышу");
         }
-    }
-
-
-
+    }*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
+        button_for_text     = (TextView) findViewById(R.id.button_for_text);
+        button_for_save     = (Button) findViewById(R.id.button_for_save);
+        button_for_continue = (Button) findViewById(R.id.button_for_continue);
+        button_for_exit     = (Button) findViewById(R.id.button_for_exit);
 
-
-        db = getBaseContext().openOrCreateDatabase("app.db", MODE_PRIVATE, null);
-        button_for_text = (TextView) findViewById(R.id.button_for_text);
+    SharedPreferences sharedPreferences = this.getSharedPreferences("visible",MODE_PRIVATE);
+    Integer visibility = sharedPreferences.getInt("VISIBILITY", 0);
+    if(visibility==1){
+        button_for_save.setVisibility(View.VISIBLE);
+        button_for_continue.setVisibility(View.VISIBLE);
+        button_for_exit.setVisibility(View.VISIBLE);
+    }
 
 //get Data from MainActivity
         Bundle arguments = getIntent().getExtras();
@@ -101,15 +96,6 @@ ImageView [][] imageView;
         ROWS = arguments.getInt("size");
         COLS = ROWS;
         Desk desk = new Desk(ROWS,COLS);
-        //int [][] cells=new int[ROWS][COLS];//??????????????????????????????????
-        Cursor query = db.rawQuery("SELECT * FROM game;", null);
-        for(int i=0;i<ROWS;i++) {
-            query.moveToNext();
-            for (int j = 0; j < COLS; j++) {
-                desk.cells[i][j] = query.getInt(j+1);
-            }
-        }
-        query.close();
 
         heuristic = arguments.getString("heuristic");
         depth     = arguments.getInt("depth");
@@ -126,15 +112,24 @@ ImageView [][] imageView;
                 break;
         }
 //build grid
+    db = getBaseContext().openOrCreateDatabase("app.db", MODE_PRIVATE, null);
+    Cursor query = db.rawQuery("SELECT * FROM game;", null);
+    for(int i=0;i<ROWS;i++) {
+        query.moveToNext();
+        for (int j = 0; j < COLS; j++) {
+            desk.cells[i][j] = query.getInt(j+1);
+        }
+    }
+    query.close();
+
         /*ImageView [][] */imageView  =new ImageView[ROWS][COLS];
-        int       [][] imageViewID=new int[ROWS][COLS];
-        TableLayout tblLayout = null;
-        tblLayout = (TableLayout) findViewById(R.id.tableLayout);
+        int [][] imageViewID          =new int[ROWS][COLS];
+        TableLayout tblLayout         =null;
+        tblLayout                     =(TableLayout) findViewById(R.id.tableLayout);
         for (int i = 0; i < ROWS; i++) {
             TableRow tableRow = new TableRow(this);
             tableRow.setLayoutParams(new TableLayout.LayoutParams(500,500));
             for (int j = 0; j < COLS; j++) {
-                // получение изображения полки
                 imageView[i][j] = new ImageView(this);
                 switch (desk.cells[i][j]){
                     case -1:
@@ -153,8 +148,6 @@ ImageView [][] imageView;
             }
             tblLayout.addView(tableRow, i);
         }
-
-
 //onClick*******************************************************************************************
         for(i=0;i<ROWS;i++)
             for(j=0;j<COLS;j++) {
@@ -172,65 +165,54 @@ ImageView [][] imageView;
                                     desk.cells[ii][jj] = 1;
                                     db.execSQL("UPDATE game SET column_"+jj+"=1 WHERE row_id="+ii+";");
                                     turnIsAI = true;
-
                                     button_for_text.setText(infoBtn[1]);
                                 }
                         if (desk.checkWin(1)) {
                             onClick_cancel(1);
-                            /*                                            Intent intent = new Intent(PlayActivity.this, WinActivity.class);
+/*                                      Intent intent = new Intent(PlayActivity.this, WinActivity.class);
                                         intent.putExtra("winner", 1);
                                         startActivity(intent);*/
                         }
                         if(turnIsAI) {
 //                          desk.turnAI(heuristic, depth, imageView, db);
-                            Thread tr=new Thread(new Runnable() {
+/*                          Thread tr=new Thread(new Runnable() {
                                 public void run() {
-                                    //           try {Thread.sleep(3000);} catch (Exception e) {}
+                                    //        try {Thread.sleep(3000);} catch (Exception e) {}
                                     //        button_for_text.setText(infoBtn[1]);
                                     desk.turnAI(heuristic,depth, imageView,db);
-                                    //      button_for_text.setText(infoBtn[0]);
-//                turnIsAI = false;
+                                    //        button_for_text.setText(infoBtn[0]);
+                                    //        turnIsAI = false;
                                 }
                             });
-//                            tr.start();
-
-//                            while(tr.isAlive()){}
-//                          (new DoAI()).execute();
+                            tr.start();
+                            while(tr.isAlive()){}
+//                          (new DoAI()).execute();*/
                             new AsyncTask<Void,Void,Void>(){
                                 @Override
                                 protected void onPreExecute() {
-//            button_for_text.setText(infoBtn[1]);
-//            mInfoTextView.setText("Кот полез на крышу");
+                                    button_for_text.setText(infoBtn[1]);
                                 }
                                 @Override
                                 protected Void doInBackground(Void... voids) {
-            desk.turnAI(heuristic,depth, imageView,db);
-/*            try{
-                TimeUnit.SECONDS.sleep(5);
-            }catch (InterruptedException e){
-                e.printStackTrace();
-            }*/
+//                                    try {TimeUnit.SECONDS.sleep(1);}catch(InterruptedException e){}
+
+                                    desk.turnAI(heuristic,depth,imageView,db);
                                     return null;
                                 }
                                 @Override
                                 protected void onPostExecute(Void aVoid) {
-                                    //turnIsAI = false;
+                                    turnIsAI = false;
                                     button_for_text.setText(infoBtn[0]);
                                     if (desk.checkWin(0)) {
                                         onClick_cancel(0);
+/*
+                                Intent intent = new Intent(PlayActivity.this, WinActivity.class);
+                                intent.putExtra("winner", 0);
+                                startActivity(intent);
+*/
                                     }
-//            mInfoTextView.setText("Кот залез на крышу");
                                 }
-
                             }.execute();
-                            button_for_text.setText(infoBtn[0]);
-                            if (desk.checkWin(0)) {
-                                onClick_cancel(0);
-                                /*                                Intent intent = new Intent(PlayActivity.this, WinActivity.class);
-                            intent.putExtra("winner", 0);
-                            startActivity(intent);*/
-                            }
-                            turnIsAI = false;
                         }
                     }
 /*                        for(int ii=0;ii<ROWS;ii++)
@@ -254,7 +236,36 @@ ImageView [][] imageView;
                     @Override
                     public void onClick(View v) {
                     }
-                }  );
+                });
             }
+        button_for_save.setVisibility(View.VISIBLE);
+        button_for_continue.setVisibility(View.VISIBLE);
+        button_for_exit.setVisibility(View.VISIBLE);
+
+        SharedPreferences sharedPreferences = this.getSharedPreferences("visible",MODE_PRIVATE);
+//        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("VISIBILITY", 1);
+        editor.commit();
+
+        db.close();
+    }
+    public void onClick_save(View v){
+        Intent intent = new Intent(PlayActivity.this, WinActivity.class);
+        intent.putExtra("winner", 0);
+        startActivity(intent);
+    }
+    public void onClick_continue(View v){
+        Intent intent = new Intent(PlayActivity.this, MainActivity.class);
+//        intent.putExtra("winner", 0);
+        startActivity(intent);
+    }
+    public void onClick_exit(View v){
+//        MainActivity.getInstance().exit();
+//        this.finish();
+        finishAffinity();
+//        finishAndRemoveTask();
+//        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
     }
 }
