@@ -141,7 +141,6 @@
                 android:text="пока ничего"
                 android:textAppearance="?android:attr/textAppearanceMedium"></TextView>-->
         </TableRow>
-
     </TableLayout>
 
     </FrameLayout>
@@ -183,4 +182,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:text="Посмотреть сохранённые" />
+
 </LinearLayout>

@@ -173,7 +173,11 @@ public class PlayActivity extends AppCompatActivity {
                                         intent.putExtra("winner", 1);
                                         startActivity(intent);*/
                         }
-                        if(turnIsAI) {
+                        if (desk.checkDeskFull()) {
+                            onClick_cancel(2);
+                        }
+
+    if(turnIsAI) {
 //                          desk.turnAI(heuristic, depth, imageView, db);
 /*                          Thread tr=new Thread(new Runnable() {
                                 public void run() {
@@ -211,6 +215,9 @@ public class PlayActivity extends AppCompatActivity {
                                 startActivity(intent);
 */
                                     }
+                                    if (desk.checkDeskFull()) {
+                                        onClick_cancel(2);
+                                    }
                                 }
                             }.execute();
                         }
@@ -226,8 +233,17 @@ public class PlayActivity extends AppCompatActivity {
             }//onClick------------------------------------------------------------------------------
     }//onCreate-------------------------------------------------------------------------------------
     void onClick_cancel(int zero_or_cross){
-        if(zero_or_cross==0) button_for_text.setText("Искусственный интеллект победил вас!");
-        else                 button_for_text.setText("Вы победили искусственный интеллект!");
+    switch (zero_or_cross) {
+        case 0:
+            button_for_text.setText("Искусственный интеллект победил вас!");
+            break;
+        case 1:
+            button_for_text.setText("Вы победили искусственный интеллект!");
+            break;
+        case 2:
+            button_for_text.setText("НИЧЬЯ !");
+            break;
+    }
         turnIsAI=false;
         for(i=0;i<ROWS;i++)
             for(j=0;j<COLS;j++) {

@@ -210,4 +210,10 @@ public class Desk{// игровое поле
         }
         return false;
     }
+    public boolean checkDeskFull(){
+        for(int i=0;i<ROWS;i++)
+            for(int j=0;j<COLS;j++)
+                if(cells[i][j]==-1) return false;
+        return true;
+    }
 }//end class Desk
