@@ -215,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("VISIBILITY", 0);
+                editor.putString("title", "");
                 if(firstPlayer=="Я") editor.putBoolean("first_step_AI_NOT_done", false);
                 else                 editor.putBoolean("first_step_AI_NOT_done", true);
                 editor.commit();

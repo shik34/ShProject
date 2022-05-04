@@ -46,7 +46,8 @@ public class PlayActivity extends AppCompatActivity {
 
     ImageView [][] imageView;
     int depth=0,i,j,ROWS,COLS;
-    boolean turnIsAI,only_for_first_step_AI;
+    boolean turnIsAI;
+//    boolean only_for_first_step_AI;
     String heuristic, infoBtn [] = {"Ваш ход","Машина думает! ЖДИТЕ !"};
 @Override//*****************************************************************************************
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +90,6 @@ public class PlayActivity extends AppCompatActivity {
         button_for_continue.setVisibility(View.VISIBLE);
         button_for_exit.setVisibility(View.VISIBLE);
     }
-
 //get Data from MainActivity
         Bundle arguments = getIntent().getExtras();
 
@@ -101,18 +101,21 @@ public class PlayActivity extends AppCompatActivity {
         depth     = arguments.getInt("depth");
 
         String firstPlayer  = arguments.getString("firstPlayer");
+        String title=new String();
         switch (firstPlayer) {
             case "Я":
                 turnIsAI=false;
-                only_for_first_step_AI=false;
-                button_for_text.setText(infoBtn[0]);
+//                only_for_first_step_AI=false;
+                title=infoBtn[0];
                 break;
             case "Искусственный интеллект":
                 turnIsAI=true;
-                only_for_first_step_AI=true;
-                button_for_text.setText(infoBtn[1]);
+//                only_for_first_step_AI=true;
+                title=infoBtn[1];
                 break;
         }
+        if(sharedPreferences.getString("title","")!="") title=sharedPreferences.getString("title","");
+        button_for_text.setText(title);
 //build grid
     db = getBaseContext().openOrCreateDatabase("app.db", MODE_PRIVATE, null);
     Cursor query = db.rawQuery("SELECT * FROM game;", null);
@@ -200,7 +203,7 @@ public class PlayActivity extends AppCompatActivity {
                                 }
                                 @Override
                                 protected Void doInBackground(Void... voids) {
-//                                    try {TimeUnit.SECONDS.sleep(1);}catch(InterruptedException e){}
+                                    try {TimeUnit.SECONDS.sleep(1);}catch(InterruptedException e){}
                                     desk.turnAI(heuristic,depth,imageView,db);
                                     return null;
                                 }
@@ -235,7 +238,7 @@ public class PlayActivity extends AppCompatActivity {
     Boolean first_step_AI_done = sharedPreferences2.getBoolean("first_step_AI_NOT_done", true);
         if(first_step_AI_done){
             turnIsAI=false;
-            only_for_first_step_AI=false;
+//            only_for_first_step_AI=false;
             button_for_text.setText(infoBtn[1]);
             desk.turnAI(heuristic,depth,imageView,db);
             button_for_text.setText(infoBtn[0]);
@@ -249,17 +252,19 @@ public class PlayActivity extends AppCompatActivity {
     }
 //onCreate------------------------------------------------------------------------------------------
     void onClick_cancel(int zero_or_cross){
+    String title2=new String();
     switch (zero_or_cross) {
         case 0:
-            button_for_text.setText("Искусственный интеллект победил вас!");
+            title2="Искусственный интеллект победил вас!";
             break;
         case 1:
-            button_for_text.setText("Вы победили искусственный интеллект!");
+            title2="Вы победили искусственный интеллект!";
             break;
         case 2:
-            button_for_text.setText("НИЧЬЯ !");
+            title2="НИЧЬЯ !";
             break;
     }
+        button_for_text.setText(title2);
         turnIsAI=false;
         for(i=0;i<ROWS;i++)
             for(j=0;j<COLS;j++) {
@@ -278,6 +283,7 @@ public class PlayActivity extends AppCompatActivity {
 //        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("VISIBILITY", 1);
+        editor.putString("title", title2);
         editor.commit();
 
         db.close();
