@@ -101,11 +101,11 @@ public class Desk{// игровое поле
             int temp_value=0,max_value=-100000000,min_value=1000000000;
             for(int ii=0;ii<ROWS;ii++) for(int jj=0;jj<COLS;jj++){
                 if(cells[ii][jj]==-1) temp_value=mini_max_heuristicValue(cells,ii,jj,depth,zero_or_cross_Turn);
-                if (zero_or_cross_Turn==1 & max_value < temp_value) max_value=temp_value;
-                if (zero_or_cross_Turn==0 & min_value > temp_value) min_value=temp_value;
+                if (zero_or_cross_Turn==0 & max_value < temp_value) max_value=temp_value;
+                if (zero_or_cross_Turn==1 & min_value > temp_value) min_value=temp_value;
             }
-            if (zero_or_cross_Turn==1) heuristicValue = max_value;
-            if (zero_or_cross_Turn==0) heuristicValue = min_value;
+            if (zero_or_cross_Turn==0) heuristicValue = max_value;
+            if (zero_or_cross_Turn==1) heuristicValue = min_value;
             cells[i][j]=-1;
         }
         return heuristicValue;
@@ -191,8 +191,6 @@ public class Desk{// игровое поле
                 if(x==1) temp_state_cells[i][j]=(cells[i][j]==1?1:0);
             }
         for(i=0;i<ROWS;i++){//победа по горизонтали
-
-
             sum=0;
             for(j=0;j<COLS;j++) sum+=temp_state_cells[i][j];
             if (sum==sum_for_win) return true;

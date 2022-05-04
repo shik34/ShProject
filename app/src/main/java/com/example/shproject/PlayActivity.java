@@ -46,7 +46,7 @@ public class PlayActivity extends AppCompatActivity {
 
     ImageView [][] imageView;
     int depth=0,i,j,ROWS,COLS;
-    boolean turnIsAI;
+    boolean turnIsAI,only_for_first_step_AI;
     String heuristic, infoBtn [] = {"Ваш ход","Машина думает! ЖДИТЕ !"};
 @Override//*****************************************************************************************
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,10 +104,12 @@ public class PlayActivity extends AppCompatActivity {
         switch (firstPlayer) {
             case "Я":
                 turnIsAI=false;
+                only_for_first_step_AI=false;
                 button_for_text.setText(infoBtn[0]);
                 break;
             case "Искусственный интеллект":
                 turnIsAI=true;
+                only_for_first_step_AI=true;
                 button_for_text.setText(infoBtn[1]);
                 break;
         }
@@ -199,7 +201,6 @@ public class PlayActivity extends AppCompatActivity {
                                 @Override
                                 protected Void doInBackground(Void... voids) {
 //                                    try {TimeUnit.SECONDS.sleep(1);}catch(InterruptedException e){}
-
                                     desk.turnAI(heuristic,depth,imageView,db);
                                     return null;
                                 }
@@ -209,11 +210,9 @@ public class PlayActivity extends AppCompatActivity {
                                     button_for_text.setText(infoBtn[0]);
                                     if (desk.checkWin(0)) {
                                         onClick_cancel(0);
-/*
-                                Intent intent = new Intent(PlayActivity.this, WinActivity.class);
+/*                              Intent intent = new Intent(PlayActivity.this, WinActivity.class);
                                 intent.putExtra("winner", 0);
-                                startActivity(intent);
-*/
+                                startActivity(intent);*/
                                     }
                                     if (desk.checkDeskFull()) {
                                         onClick_cancel(2);
@@ -231,7 +230,24 @@ public class PlayActivity extends AppCompatActivity {
                                }*/
                 });
             }//onClick------------------------------------------------------------------------------
-    }//onCreate-------------------------------------------------------------------------------------
+    //если первый ход машины ***************************************************************************
+    SharedPreferences sharedPreferences2 = this.getSharedPreferences("visible",MODE_PRIVATE);
+    Boolean first_step_AI_done = sharedPreferences2.getBoolean("first_step_AI_NOT_done", true);
+        if(first_step_AI_done){
+            turnIsAI=false;
+            only_for_first_step_AI=false;
+            button_for_text.setText(infoBtn[1]);
+            desk.turnAI(heuristic,depth,imageView,db);
+            button_for_text.setText(infoBtn[0]);
+
+    //        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor2 = sharedPreferences2.edit();
+            editor2.putBoolean("first_step_AI_NOT_done", false);
+            editor2.commit();
+        }
+    //если первый ход машины ---------------------------------------------------------------------------
+    }
+//onCreate------------------------------------------------------------------------------------------
     void onClick_cancel(int zero_or_cross){
     switch (zero_or_cross) {
         case 0:
