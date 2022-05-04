@@ -74,7 +74,7 @@ public class Desk{// игровое поле
     }
 
     void turnAI_heuristic(ImageView[][] imageView,int depth, SQLiteDatabase db){
-        int temp_value=0,max_value=-1000000000,max_i=0,max_j=0;
+        int temp_value,max_value=-1000000000,max_i=0,max_j=0;
         for(int i=0;i<ROWS;i++) for(int j=0;j<COLS;j++)
             if(cells[i][j]==-1) {
                 temp_value=mini_max_heuristicValue(cells,i,j,depth,0);//получение значения в случае хода в i,j
@@ -125,6 +125,7 @@ public class Desk{// игровое поле
             return v;
         }
     }
+
     private int sum_of_winLines_for_ZeroOrCross(int[][]cells, int zero_or_cross){//zero_or_cross==0 - for zeros, zero_or_cross==1 - for cross
         int i,j;
         int [][] temp_cells=new int[ROWS][COLS];
@@ -145,6 +146,7 @@ public class Desk{// игровое поле
                 }
         return sum_of_winLines_for_1(temp_cells);
     }
+
     private int sum_of_winLines_for_1(int[][]cells){
         int sum=0,temp_sum;
         for (int i = 0; i <ROWS ; i++) {//horizontal
@@ -189,6 +191,7 @@ public class Desk{// игровое поле
                 if(x==1) temp_state_cells[i][j]=(cells[i][j]==1?1:0);
             }
         for(i=0;i<ROWS;i++){//победа по горизонтали
+
             sum=0;
             for(j=0;j<COLS;j++) sum+=temp_state_cells[i][j];
             if (sum==sum_for_win) return true;
