@@ -193,7 +193,6 @@ public class Desk{// игровое поле
         for(i=0;i<ROWS;i++){//победа по горизонтали
 
 
-
             sum=0;
             for(j=0;j<COLS;j++) sum+=temp_state_cells[i][j];
             if (sum==sum_for_win) return true;
