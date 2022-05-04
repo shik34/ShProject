@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     String[] whoAreFirst = {"Я", "Искусственный интеллект"};
     String firstPlayer;
-
+    Button btn_load;
     @Override
 //*****************************************************************************************
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         TextView tv_dbOut = findViewById(R.id.tv_dbOut);
         TextView tv_info2 = findViewById(R.id.tv_info2);
+        btn_load = (Button) findViewById(R.id.btn_load);
 /*        Cursor query = db.rawQuery("SELECT * FROM game;", null);
         TextView tv_dbOut = findViewById(R.id.tv_dbOut);
         tv_dbOut.setText("");
@@ -222,14 +223,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        Button btn_load = (Button) findViewById(R.id.btn_load);
-        btn_load.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Intent intent = new Intent(MainActivity.this, ShowActivity.class);
-                startActivity(intent);
-            }
-        });
+
+
     }
     /*    private static MainActivity instance;
         public static MainActivity getInstance() {
@@ -243,4 +238,14 @@ public class MainActivity extends AppCompatActivity {
             System.exit(0);
 
         }*/
+    public void onClick_load(View view){
+        SharedPreferences sharedPreferences = this.getSharedPreferences("visible_show",MODE_PRIVATE);
+//        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("VISIBILITY_SHOW", 1);
+        editor.commit();
+        Intent intent = new Intent(MainActivity.this, ShowActivity.class);
+        startActivity(intent);
+    }
+
 }
