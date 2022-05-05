@@ -19,11 +19,11 @@ public class MainActivity extends AppCompatActivity {
     String[] gridSize = {"3 x 3", "4 x 4", "5 x 5"};
     int size = 3;
 
-    String[] heuristicType = {"По горизональным рядам", "Случайный ход", "Лучший ход", "Настоящая эвристика"};
+    String[] heuristicType = {"По горизональным рядам", "Случайный ход", "Лучший ход", "Эвристический поиск"};
     String heuristic;
 
-    String[] whoAreFirst = {"Я", "Искусственный интеллект"};
-    String firstPlayer;
+    String[] whoAreFirst = {"Я", /*"увы пока нет выбора"};//"*/"Искусственный интеллект"};
+    String firstPlayer="Я";
     Button btn_load;
     @Override
 //*****************************************************************************************
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             tv_dbOut.append(s+"\n");
         }
         query.close();*/
-        String[] hardLevel = {"Первый", "Второй", "Третий", "Четвёртый", "Пятый", "Шестой", "Седьмой", "Восьмой", "Девятый"};
+        String[] hardLevel = {"Первый", "Второй", "Третий"/*, "Четвёртый", "Пятый", "Шестой", "Седьмой", "Восьмой", "Девятый"*/};
         Spinner spinner_hardLevel = findViewById(R.id.spinner_hard_level);
         ArrayAdapter<String> adapter_hardLevel = new ArrayAdapter(this, android.R.layout.simple_spinner_item, hardLevel);
         // Определяем разметку для использования при выборе элемента
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                     case "Третий":
                         depth = 3;
                         break;
-                    case "Четвёртый":
+/*                    case "Четвёртый":
                         depth = 4;
                         break;
                     case "Пятый":
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case "Девятый":
                         depth = 9;
-                        break;
+                        break;*/
                 }
             }
 
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                         tv_info2.setVisibility(View.INVISIBLE);
                         spinner_hardLevel.setVisibility(View.INVISIBLE);
                         break;
-                    case "Настоящая эвристика":
+                    case "Эвристический поиск":
                         heuristic = "Настоящая эвристика";
                         tv_dbOut.setVisibility(View.VISIBLE);
                         tv_info2.setVisibility(View.VISIBLE);
@@ -192,6 +192,8 @@ public class MainActivity extends AppCompatActivity {
                     case "Искусственный интеллект":
                         firstPlayer = "Искусственный интеллект";
                         break;
+                    default :
+                        firstPlayer = "Я";
                 }
             }
             @Override
@@ -213,6 +215,9 @@ public class MainActivity extends AppCompatActivity {
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("VISIBILITY", 0);
+                editor.putString("title", "");
+                if(firstPlayer=="Я") editor.putBoolean("first_step_AI_NOT_done", false);
+                else                 editor.putBoolean("first_step_AI_NOT_done", true);
                 editor.commit();
 
                 Intent intent = new Intent(MainActivity.this, PlayActivity.class);
@@ -223,8 +228,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
     /*    private static MainActivity instance;
         public static MainActivity getInstance() {
@@ -247,5 +250,4 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, ShowActivity.class);
         startActivity(intent);
     }
-
 }

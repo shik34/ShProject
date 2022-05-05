@@ -13,12 +13,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
-        <Button
+        <!--<Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="Сохранить"
-            android:visibility="invisible" />
+            android:visibility="invisible" />-->
         <Button
             android:id="@+id/button_for_continue_SHOW"
             android:layout_width="wrap_content"
@@ -37,6 +37,8 @@
             android:layout_height="wrap_content"
             android:text="Выйти"
             android:onClick="onClick_exit_SHOW"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:gravity="center_horizontal"
             android:visibility="visible"
             />
