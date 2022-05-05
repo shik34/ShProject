@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     String[] gridSize = {"3 x 3", "4 x 4", "5 x 5"};
     int size = 3;
 
-    String[] heuristicType = {"По горизональным рядам", "Случайный ход", "Лучший ход", "Настоящая эвристика"};
+    String[] heuristicType = {"По горизональным рядам", "Случайный ход", "Лучший ход", "Эвристический поиск"};
     String heuristic;
 
     String[] whoAreFirst = {"Я", /*"увы пока нет выбора"};//"*/"Искусственный интеллект"};
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                         tv_info2.setVisibility(View.INVISIBLE);
                         spinner_hardLevel.setVisibility(View.INVISIBLE);
                         break;
-                    case "Настоящая эвристика":
+                    case "Эвристический поиск":
                         heuristic = "Настоящая эвристика";
                         tv_dbOut.setVisibility(View.VISIBLE);
                         tv_info2.setVisibility(View.VISIBLE);
