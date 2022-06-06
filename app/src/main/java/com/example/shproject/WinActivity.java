@@ -19,10 +19,7 @@ public class WinActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_win);
-/*        Bundle arguments = getIntent().getExtras();
-        int number_of_winner    = arguments.getInt("winner");
-        Toast toast = Toast.makeText(this,"Победил "+number_of_winner, Toast.LENGTH_SHORT);
-        toast.show();*/
+
         EditText et=findViewById(R.id.et_input);
         et.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,14 +37,12 @@ public class WinActivity extends AppCompatActivity {
                 int i=query.getCount();
                 if(i==1){
                     et.setText("такое имя уже есть - введите другое");
-//                    db.close();
-//                    return;
+
                 }
                 else {
                     String s="CREATE TABLE " + name + " AS SELECT * FROM game";
                     db.execSQL(s);
-//                    db.execSQL("CREATE TABLE " + name + " SELECT * FROM game;");
-//                    et.setText("у Вас всё получилось!");
+
                     TextView tv=findViewById(R.id.tv_win);
                     tv.setVisibility(View.VISIBLE);
                     tv.setText("у Вас всё получилось!");
@@ -77,10 +72,4 @@ public class WinActivity extends AppCompatActivity {
             }
         });
     }
-/*
-    public void onClick(View view) {
-        Toast toast = Toast.makeText(this,"Пора покормить кота!", Toast.LENGTH_SHORT);
-        toast.show();
-    }
-*/
 }

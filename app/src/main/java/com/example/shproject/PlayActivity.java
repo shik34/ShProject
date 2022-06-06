@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,27 +18,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class PlayActivity extends AppCompatActivity {
-//  Desk desk;
-//  Button button_for_text;
-//  private int[] imageView_ID=new int[9];
-//  int cellNumber;
-//  private boolean[] keyFinish=new boolean[9];
-//  TextView tv;
-//  private List<ImageView> imageViews;
-//  private boolean[] keyTemp =new boolean[9];
-//  int playerNumber=0;
-/*    Desk desk = new Desk(IMAGE_VIEW_NUMBER);
-    private boolean checkVictory(int playerNumber){
-        switch (desk.checkWin(playerNumber)) {
-            case 0:
-                tv.setText("OOOOOOOOOOOOOOOOOOOO");
-                return true;
-            case 1:
-                tv.setText("XXXXXXXXXXXXXXXXXXXX");
-                return true;
-        }
-        return false;
-    }*/
+
     SQLiteDatabase db;
     TextView button_for_text;
     Button button_for_save, button_for_continue, button_for_exit;
@@ -51,30 +30,7 @@ public class PlayActivity extends AppCompatActivity {
     String heuristic, infoBtn [] = {"Ваш ход","Машина думает! ЖДИТЕ !"};
 @Override//*****************************************************************************************
     protected void onCreate(Bundle savedInstanceState) {
-/*    class DoAI extends AsyncTask<Void, Void, Desk> {
-        @Override
-        protected void onPreExecute() {
-            button_for_text.setText(infoBtn[1]);
-        }
-        @Override
-        protected Desk doInBackground(Void... voids) {
-            desk.turnAI(heuristic,depth, imageView,db);
-            try{
-                TimeUnit.SECONDS.sleep(5);
-            }catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            return null;
-        }
-        @Override
-        protected void onPostExecute(Desk aVoid) {
-            turnIsAI = false;
-            button_for_text.setText(infoBtn[0]);
-            if (aVoid.checkWin(0)) {
-                onClick_cancel(0);
-            }
-        }
-    }*/
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
@@ -157,7 +113,6 @@ public class PlayActivity extends AppCompatActivity {
         for(i=0;i<ROWS;i++)
             for(j=0;j<COLS;j++) {
                 ImageView iv=imageView[i][j];
-//              imageView[i][j].setOnClickListener(new View.OnClickListener() {
                 iv.setOnClickListener(new View.OnClickListener() {
 @Override//*****************************************************************************************
                     public void onClick(View v) {
@@ -174,63 +129,37 @@ public class PlayActivity extends AppCompatActivity {
                                 }
                         if (desk.checkWin(1)) {
                             onClick_cancel(1);
-/*                                      Intent intent = new Intent(PlayActivity.this, WinActivity.class);
-                                        intent.putExtra("winner", 1);
-                                        startActivity(intent);*/
                         }
                         if (desk.checkDeskFull()) {
                             onClick_cancel(2);
                         }
 
     if(turnIsAI) {
-//                          desk.turnAI(heuristic, depth, imageView, db);
-/*                          Thread tr=new Thread(new Runnable() {
-                                public void run() {
-                                    //        try {Thread.sleep(3000);} catch (Exception e) {}
-                                    //        button_for_text.setText(infoBtn[1]);
-                                    desk.turnAI(heuristic,depth, imageView,db);
-                                    //        button_for_text.setText(infoBtn[0]);
-                                    //        turnIsAI = false;
-                                }
-                            });
-                            tr.start();
-                            while(tr.isAlive()){}
-//                          (new DoAI()).execute();*/
-                            new AsyncTask<Void,Void,Void>(){
-                                @Override
-                                protected void onPreExecute() {
-                                    button_for_text.setText(infoBtn[1]);
-                                }
-                                @Override
-                                protected Void doInBackground(Void... voids) {
-                                    try {TimeUnit.SECONDS.sleep(1);}catch(InterruptedException e){}
-                                    desk.turnAI(heuristic,depth,imageView,db);
-                                    return null;
-                                }
-                                @Override
-                                protected void onPostExecute(Void aVoid) {
-                                    turnIsAI = false;
-                                    button_for_text.setText(infoBtn[0]);
-                                    if (desk.checkWin(0)) {
-                                        onClick_cancel(0);
-/*                              Intent intent = new Intent(PlayActivity.this, WinActivity.class);
-                                intent.putExtra("winner", 0);
-                                startActivity(intent);*/
-                                    }
-                                    if (desk.checkDeskFull()) {
-                                        onClick_cancel(2);
-                                    }
-                                }
-                            }.execute();
+
+        Thread tr=new Thread(new Runnable() {
+            public void run() {
+                button_for_text.setText(infoBtn[1]);
+
+                try {TimeUnit.SECONDS.sleep(1);}catch(InterruptedException e){}
+                desk.turnAI(heuristic,depth, imageView,db);
+
+                {//onPostExecute
+                    turnIsAI = false;
+                    button_for_text.setText(infoBtn[0]);
+                    if (desk.checkWin(0)) {
+                        onClick_cancel(0);
+                    }
+                    if (desk.checkDeskFull()) {
+                        onClick_cancel(2);
+                    }
+                }
+
+            }
+        });
+        tr.start();
                         }
                     }
-/*                        for(int ii=0;ii<ROWS;ii++)
-                           for(int jj=0;jj<COLS;jj++)
-                               if(imageViewID[ii][jj]==id & cells[ii][jj]==1) {
-                                      iv.setImageResource(R.drawable.icon_empty);
-                                      cells[ii][jj]=-1;
-                                      return;
-                               }*/
+
                 });
             }//onClick------------------------------------------------------------------------------
     //если первый ход машины ***************************************************************************
@@ -238,12 +167,11 @@ public class PlayActivity extends AppCompatActivity {
     Boolean first_step_AI_done = sharedPreferences2.getBoolean("first_step_AI_NOT_done", true);
         if(first_step_AI_done){
             turnIsAI=false;
-//            only_for_first_step_AI=false;
+
             button_for_text.setText(infoBtn[1]);
             desk.turnAI(heuristic,depth,imageView,db);
             button_for_text.setText(infoBtn[0]);
 
-    //        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
             SharedPreferences.Editor editor2 = sharedPreferences2.edit();
             editor2.putBoolean("first_step_AI_NOT_done", false);
             editor2.commit();
@@ -280,7 +208,7 @@ public class PlayActivity extends AppCompatActivity {
         button_for_exit.setVisibility(View.VISIBLE);
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("visible",MODE_PRIVATE);
-//        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("VISIBILITY", 1);
         editor.putString("title", title2);
@@ -299,11 +227,7 @@ public class PlayActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void onClick_exit(View v){
-//        MainActivity.getInstance().exit();
-//        this.finish();
         finishAffinity();
-//        finishAndRemoveTask();
-//        android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(0);
     }
 }

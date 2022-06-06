@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -36,18 +35,7 @@ public class MainActivity extends AppCompatActivity {
         TextView tv_dbOut = findViewById(R.id.tv_dbOut);
         TextView tv_info2 = findViewById(R.id.tv_info2);
         btn_load = (Button) findViewById(R.id.btn_load);
-/*        Cursor query = db.rawQuery("SELECT * FROM game;", null);
-        TextView tv_dbOut = findViewById(R.id.tv_dbOut);
-        tv_dbOut.setText("");
-        String s;
-        while(query.moveToNext()){
-            s="";
-            for (int i = 0; i <6 ; i++) {
-                s+=" "+query.getInt(i);
-            }
-            tv_dbOut.append(s+"\n");
-        }
-        query.close();*/
+
         String[] hardLevel = {"Первый", "Второй", "Третий"/*, "Четвёртый", "Пятый", "Шестой", "Седьмой", "Восьмой", "Девятый"*/};
         Spinner spinner_hardLevel = findViewById(R.id.spinner_hard_level);
         ArrayAdapter<String> adapter_hardLevel = new ArrayAdapter(this, android.R.layout.simple_spinner_item, hardLevel);
@@ -70,24 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     case "Третий":
                         depth = 3;
                         break;
-/*                    case "Четвёртый":
-                        depth = 4;
-                        break;
-                    case "Пятый":
-                        depth = 5;
-                        break;
-                    case "Шестой":
-                        depth = 6;
-                        break;
-                    case "Седьмой":
-                        depth = 7;
-                        break;
-                    case "Восьмой":
-                        depth = 8;
-                        break;
-                    case "Девятый":
-                        depth = 9;
-                        break;*/
+
                 }
             }
 
@@ -229,21 +200,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    /*    private static MainActivity instance;
-        public static MainActivity getInstance() {
-            return instance;
-        }
-        public void exit() {
-            //        this.finish();
-            finishAffinity();
-    //        finishAndRemoveTask();
-    //        android.os.Process.killProcess(android.os.Process.myPid());
-            System.exit(0);
 
-        }*/
     public void onClick_load(View view){
         SharedPreferences sharedPreferences = this.getSharedPreferences("visible_show",MODE_PRIVATE);
-//        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("VISIBILITY_SHOW", 1);
         editor.commit();

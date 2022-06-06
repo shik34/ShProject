@@ -172,15 +172,7 @@ public class Desk{// игровое поле
 
         return sum;
     }
-/*
-    public void setCellStateByIMAGE_VIEW_NUMBER(int image_view_number, int x){//x==0 - нолик, х==1 - крестик
-        for(int i=0;i<3;i++)
-            for(int j=0;j<3;j++)
-                if(cells[i][j].image_view_number == image_view_number) {
-                    cells[i][j].eox=(x==0?0:1);
-                }
-    }
-*/
+
     public boolean checkWin(int x){// x==0 check victory for ZERO, x==1 check victory for CROSS
         int sum=0,sum_for_win=ROWS;
         int[][] temp_state_cells =new int [ROWS][COLS];

@@ -36,13 +36,9 @@ public class ShowActivity extends AppCompatActivity {
     et_input_show  =  findViewById(R.id.et_input_SHOW);
     btn_show         =  findViewById(R.id.btn_show);
     et_input_show=findViewById(R.id.et_input_SHOW);
-/*
-        button_for_continue = (Button) findViewById(R.id.button_for_continue_SHOW);
-        button_for_exit     = (Button) findViewById(R.id.button_for_exit_SHOW);
-        SharedPreferences sharedPreferences2 = getPreferences(MODE_PRIVATE);
-        Boolean let_show = sharedPreferences2.getBoolean("let_show", false);*/
+
     SharedPreferences sharedPreferences = this.getSharedPreferences("visible_show",MODE_PRIVATE);
-//        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+
     Integer visibility = sharedPreferences.getInt("VISIBILITY_SHOW", 1);
     String teble_name = sharedPreferences.getString("TABLE_NAME_SHOW", "");
     if(visibility==0){
@@ -66,17 +62,7 @@ public class ShowActivity extends AppCompatActivity {
 //onCreate-------------------------------------------------------------------------------------
 //onClick ******************************************************************************************
 public void onClick_show(View v) {
-/*
-        Toast toast=    Toast.makeText(ShowActivity.this,et_input_show.getText().toString(), Toast.LENGTH_LONG);
-//    Toast toast=Toast.makeText(this,"qwerty", Toast.LENGTH_LONG);
-        toast.show();
-//    SharedPreferences sharedPreferences = this.getSharedPreferences("visible",MODE_PRIVATE);
-    SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-    SharedPreferences.Editor editor = sharedPreferences.edit();
-    editor.putBoolean("show", true);
-    editor.putString("test", "test");
-    editor.commit();
-*/
+
         String name=et_input_show.getText().toString();
         boolean it_is_good=show(name);
 if(it_is_good){
